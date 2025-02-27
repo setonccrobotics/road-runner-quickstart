@@ -8,11 +8,13 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous(name="ObservationTripleChamber", group="SCC")
+@Disabled
 public class ObservationTripleChamber extends LinearOpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -43,6 +45,14 @@ public class ObservationTripleChamber extends LinearOpMode {
         Pose2d submersibleThreePos = new Pose2d(3, -42.5, Math.toRadians(270.0));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
+
+        /*Action driveFromSubmersibleCollectSampleOneToSpecimenPos = drive.actionBuilder(submersiblePos)
+                .splineToConstantHeading(new Vector2d(35.17, -37.91), Math.toRadians(60.00))
+                .splineToConstantHeading(new Vector2d(40.37, -15.53), Math.toRadians(90.00))
+                .splineToConstantHeading(new Vector2d(49.90, -12.78), Math.toRadians(270.00))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(48.17, -54.50), Math.toRadians(270.00))
+                .build();*/
 
         // Define the robot actions
         Action driveFromStartToStartOffWallPos = drive.actionBuilder(startPos)

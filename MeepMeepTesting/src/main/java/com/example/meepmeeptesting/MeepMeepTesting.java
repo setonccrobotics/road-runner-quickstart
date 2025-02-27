@@ -16,17 +16,12 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(9, -61, Math.toRadians(270.0));
-        Pose2d startOffWallPos = new Pose2d(9, -53, Math.toRadians(270.0));
-        Pose2d sampleOnePos = new Pose2d(48.5, -11, Math.toRadians(270.0));
-        Pose2d sampleTwoPos = new Pose2d(59, -11, Math.toRadians(270.0));
-        Pose2d parkPos = new Pose2d(45, -55, Math.toRadians(270.0));
-        Pose2d specimenPos = new Pose2d(48.5, -54.5, Math.toRadians(270.0));
-        Pose2d specimenThreePos = new Pose2d(47.5, -54.5, Math.toRadians(270.0));
-        Pose2d submersiblePos = new Pose2d(9, -44, Math.toRadians(270.0));
-        Pose2d submersibleTwoPos = new Pose2d(6, -42.5, Math.toRadians(270.0));
-        Pose2d submersibleThreePos = new Pose2d(3, -42.5, Math.toRadians(270.0));
-        Pose2d submersibleFourPos = new Pose2d(0, -42.5, Math.toRadians(270.0));
+        Pose2d startPos = new Pose2d(-24, 0, Math.toRadians(90.0));
+        Pose2d startOffWallPos = new Pose2d(-24, 4, Math.toRadians(90.0));
+        Pose2d netZonePos = new Pose2d(-41, 11, Math.toRadians(45.0));
+        Pose2d tapeMark1 = new Pose2d(-39,29, Math.toRadians(90.0));
+        Pose2d tapeMark2 = new Pose2d(-50,29, Math.toRadians(90.0));
+        Pose2d tapeMark3 = new Pose2d(-53,29, Math.toRadians(125.0));
 
         // Create a drive object for meep meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -40,76 +35,60 @@ public class MeepMeepTesting {
                 .lineToY(startOffWallPos.position.y)
                 .build();
 
-        Action driveFromStartOffWallToSubmersiblePos = drive.actionBuilder(startOffWallPos)
-                .lineToY(submersiblePos.position.y)
+        Action driveFromStartOffWallToNetPos = drive.actionBuilder(startOffWallPos)
+                .splineToLinearHeading(netZonePos, netZonePos.heading)
                 .build();
 
-        Action driveFromStartToSubmersiblePos = drive.actionBuilder(startPos)
-                .lineToY(submersiblePos.position.y)
+        Action driveFromNetToTapeMark1Pos = drive.actionBuilder(netZonePos)
+                .turnTo(tapeMark1.heading)
+                .splineToLinearHeading(tapeMark1, tapeMark1.heading)
                 .build();
 
-        Action driveFromSubmersibleThreeToParkPos = drive.actionBuilder(submersibleThreePos)
-                //.lineToY(parkPos.position.y)
-                //.strafeTo(new Vector2d(parkPos.position.x, submersiblePos.position.y - 10))
-                //.splineToLinearHeading(parkPos, parkPos.heading)
-                .strafeTo(new Vector2d(parkPos.position.x, parkPos.position.y))
+        Action driveFromTapeMark1ToNetZonePos = drive.actionBuilder(tapeMark1)
+                .splineToLinearHeading(netZonePos, netZonePos.heading)
                 .build();
 
-        Action driveFromSubmersibleToSampleOnePos = drive.actionBuilder(submersiblePos)
-                .strafeTo(new Vector2d(submersiblePos.position.x + 8, submersiblePos.position.y))
-                .splineToLinearHeading(sampleOnePos, sampleOnePos.heading)
-                //.splineToLinearHeading(specimenPos, specimenPos.heading)
+        Action driveFromNetToTapeMark2Pos = drive.actionBuilder(netZonePos)
+                .turnTo(tapeMark2.heading)
+                .splineToLinearHeading(tapeMark2, tapeMark2.heading)
                 .build();
 
-        Action driveFromSubmersibleTwoToSampleTwoPos = drive.actionBuilder(submersibleTwoPos)
-                .strafeTo(new Vector2d(submersibleTwoPos.position.x + 8, submersibleTwoPos.position.y))
-                .splineToLinearHeading(sampleTwoPos, sampleTwoPos.heading)
-                .splineToLinearHeading(specimenPos, specimenPos.heading)
+        Action driveFromTapeMark2ToNetZonePos = drive.actionBuilder(tapeMark2)
+                .splineToLinearHeading(netZonePos, netZonePos.heading)
                 .build();
 
-        Action driveFromSampleOnePosToSpecimenPos = drive.actionBuilder(sampleOnePos)
-                .splineToLinearHeading(specimenPos, specimenPos.heading)
+        Action driveFromNetToTapeMark3Pos = drive.actionBuilder(netZonePos)
+                .turnTo(tapeMark3.heading)
+                .splineToLinearHeading(tapeMark3, tapeMark3.heading)
                 .build();
 
-        Action driveFromSubmersibleTwoToSpecimenPos = drive.actionBuilder(submersibleTwoPos)
-                //.lineToY(submersibleTwoPos.position.y - 12)
-                //.strafeTo(new Vector2d(specimenThreePos.position.x, specimenThreePos.position.y))
-                .splineToLinearHeading(specimenThreePos, specimenThreePos.heading)
+        Action driveFromTapeMark3ToNetZonePos = drive.actionBuilder(tapeMark3)
+                .splineToLinearHeading(netZonePos, netZonePos.heading)
                 .build();
-
-        Action driveFromSpecimenToSubmersiblePos = drive.actionBuilder(specimenPos)
-                .lineToY(specimenPos.position.y + 6)
-                //.splineToLinearHeading(submersibleTwoPos, submersibleTwoPos.heading)
-                //.lineToY(submersibleTwoPos.position.y + 2)
-                .strafeTo(new Vector2d(submersibleTwoPos.position.x, submersibleTwoPos.position.y))
-                .build();
-
-        Action driveFromSpecimenThreeToSubmersibleThreePos = drive.actionBuilder(specimenThreePos)
-                //.lineToY(specimenThreePos.position.y + 6)
-                //.strafeTo(new Vector2d(submersibleThreePos.position.x, submersibleThreePos.position.y))
-                .splineToConstantHeading(new Vector2d(submersibleThreePos.position.x, submersibleThreePos.position.y),
-                        submersibleThreePos.heading)
-                //.lineToY(submersibleThreePos.position.y + 2)
-                .build();
-
-        Action driveFromSpecimenFourToSubmersibleFourPos = drive.actionBuilder(specimenPos)
-                .strafeTo(new Vector2d(submersibleFourPos.position.x, submersibleFourPos.position.y))
-                .build();
-
 
         // Define the order of actions
         Action runAuto = new SequentialAction(
+                driveFromStartToStartOffWallPos,
+                driveFromStartOffWallToNetPos,
+                driveFromNetToTapeMark1Pos,
+                driveFromTapeMark1ToNetZonePos,
+                driveFromNetToTapeMark2Pos,
+                driveFromTapeMark2ToNetZonePos,
+                driveFromNetToTapeMark3Pos,
+                driveFromTapeMark3ToNetZonePos);
+        /*/ Define the order of actions
+        Action runAuto = new SequentialAction(
                 driveFromStartToSubmersiblePos,
-                //driveFromStartToStartOffWallPos,
-                //driveFromStartOffWallToSubmersiblePos,
                 driveFromSubmersibleToSampleOnePos,
-                driveFromSampleOnePosToSpecimenPos,
-                driveFromSpecimenToSubmersiblePos,
-                driveFromSubmersibleTwoToSampleTwoPos,
-                driveFromSpecimenThreeToSubmersibleThreePos,
+                deliverTwoSamplesToObservationZonePos,
+                driveFromObservationSampleTwoToSpecimenPos,
+                driveFromSpecimenToSubmersibleTwoPos,
                 driveFromSubmersibleTwoToSpecimenPos,
-                driveFromSpecimenFourToSubmersibleFourPos,
-                driveFromSubmersibleThreeToParkPos);
+                driveFromSpecimenToSubmersibleThreePos,
+                driveFromSubmersibleThreeToSpecimenPos,
+                driveFromSpecimenToSubmersibleFourPos,
+                driveFromSubmersibleFourToParkPos);
+         */
 
         // Run the auto program
         myBot.runAction(runAuto);

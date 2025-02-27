@@ -127,12 +127,12 @@ public class LiftAssembly {
 
         // Zero the lift
         while (liftHomeSensor.isPressed() || liftBottomSensor.isPressed()) {
-            liftMotor.setPower(-0.2);
+            liftMotor.setPower(-0.6);
         }
 
         // Back off the home switch
         while (!liftHomeSensor.isPressed()) {
-            liftMotor.setPower(0.2);
+            liftMotor.setPower(0.6);
         }
         liftMotor.setPower(0.0);
 
@@ -159,11 +159,33 @@ public class LiftAssembly {
         slideMotor.setPower(1.0);
     }
 
-    public void liftToHomePos() {
+    public void slideToEncoderPosBlocking(int encoderPos) {
+        double percent = 10.0;
+        double threshold = encoderPos * (percent / 100.0);
+        double lowerBound = encoderPos - threshold;
+        double upperBound = encoderPos + threshold;
+
+        slideMotor.setTargetPosition(encoderPos);
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideMotor.setPower(1.0);
+        while (!(slideMotor.getCurrentPosition() >= lowerBound && slideMotor.getCurrentPosition() <= upperBound)) {
+            // no op
+        }
+    }
+
+    public void zeroLift() {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while (!liftBottomSensor.isPressed()) {
-            liftMotor.setPower(0.3);
+            liftMotor.setPower(0.6);
+        }
+        liftMotor.setPower(0.0);
+    }
+
+    public void liftToHomePos() {
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while (!liftBottomSensor.isPressed()) {
+            liftMotor.setPower(0.7);
         }
         liftMotor.setPower(0.0);
     }

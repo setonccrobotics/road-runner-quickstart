@@ -15,13 +15,13 @@ public class ClawAssembly {
     static final double WRIST_ROTATION_MAX = 1.0;
     static final double WRIST_ROTATION_HOME_POS = 0.5;
     //static final double WRIST_PITCH_MIN = 0.28;
-    static final double WRIST_PITCH_MIN = 0.55;
+    static final double WRIST_PITCH_MIN = 0.0;//0.55;
     static final double WRIST_PITCH_MAX_WITH_EXTENSION = 0.99;
     //static final double WRIST_PITCH_MAX = 0.73;
-    static final double WRIST_PITCH_MAX = 0.83;
+    static final double WRIST_PITCH_MAX = 1.0;//0.83;
     static final double WRIST_PITCH_HOME_POS = 0.78;
     static final double WRIST_ROTATION_INCREMENT = 0.02;
-    static final double WRIST_PITCH_INCREMENT = 0.02;
+    static final double WRIST_PITCH_INCREMENT = 0.02;//0.02;
     //private CRServo leftClawServo;
     //private CRServo rightClawServo;
     private Servo leftClawServo;
@@ -38,7 +38,7 @@ public class ClawAssembly {
     private ElapsedTime wristRotationTimer = new ElapsedTime();
     private ElapsedTime wristPitchTimer = new ElapsedTime();
     static final int WRIST_ROTATION_MOVEMENT_DELAY_MS = 50;
-    static final int WRIST_PITCH_MOVEMENT_DELAY_MS = 80;
+    static final int WRIST_PITCH_MOVEMENT_DELAY_MS = 20;//80;
 
 
     public ClawAssembly(HardwareMap hardwareMap) {
@@ -49,6 +49,7 @@ public class ClawAssembly {
         //rightClawServo.setDirection(DcMotorSimple.Direction.REVERSE);
         wristRotationServo = hardwareMap.get(Servo.class, "wristRotationServo");
         wristPitchServo = hardwareMap.get(Servo.class, "wristPitchServo");
+        wristPitchServo.setDirection(Servo.Direction.REVERSE);
     }
     public void run(Gamepad gamepad, int currentSlideEncoderPos) {
         if (gamepad.a) {
@@ -92,7 +93,7 @@ public class ClawAssembly {
             wristRotationTimer.reset();
         }
 
-        if (currentPitchServoPos >= WRIST_PITCH_MAX && currentSlideEncoderPos < 140) {
+        if (currentPitchServoPos >= WRIST_PITCH_MAX && currentSlideEncoderPos < 300) {
             wristPitchServo.setPosition(WRIST_PITCH_MAX);
             currentPitchServoPos = WRIST_PITCH_MAX;
         }
@@ -114,6 +115,18 @@ public class ClawAssembly {
             wristPitchServo.setPosition(currentPitchServoPos);
             wristPitchTimer.reset();
         }
+
+
+        /*if ((gamepad.left_stick_y < -0.02 || gamepad.dpad_up)) {
+            currentPitchServoPos -= WRIST_PITCH_INCREMENT;
+            wristPitchServo.setPosition(currentPitchServoPos);
+            wristPitchTimer.reset();
+        }
+        else if ((gamepad.left_stick_y > 0.02 || gamepad.dpad_down)) {
+            currentPitchServoPos += WRIST_PITCH_INCREMENT;
+            wristPitchServo.setPosition(currentPitchServoPos);
+            wristPitchTimer.reset();
+        }*/
     }
 
     public void addTelemetry(Telemetry telemetry) {
@@ -142,13 +155,19 @@ public class ClawAssembly {
 
     public void clawOpen() {
         // Open the claws
-        leftClawServo.setPosition(0.55); // Smaller number is MORE open
-        rightClawServo.setPosition(0.53); // Bigger number is MORE open
+        leftClawServo.setPosition(0.73); // Smaller number is MORE open OLD 0.55
+        rightClawServo.setPosition(0.33); // Bigger number is MORE open OLD 0.53
     }
     public void clawClose() {
         // Close the claws
-        leftClawServo.setPosition(0.65); // Bigger number is MORE closed
-        rightClawServo.setPosition(0.43); // Smaller number is MORE closed
+        leftClawServo.setPosition(0.84); // Bigger number is MORE closed OLD 0.65
+        rightClawServo.setPosition(0.22); // Smaller number is MORE closed OLD 0.43
+    }
+
+    public void clawOpenHuge() {
+        // Open the claws
+        leftClawServo.setPosition(0.0); // Smaller number is MORE open
+        rightClawServo.setPosition(1.0); // Bigger number is MORE open
     }
 
 }
