@@ -20,12 +20,12 @@ public class NetZoneQuadBucket extends LinearOpMode {
         ClawAssembly clawAssembly = new ClawAssembly(hardwareMap);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(-24, 0, Math.toRadians(90.0));
-        Pose2d startOffWallPos = new Pose2d(-24, 4, Math.toRadians(90.0));
-        Pose2d netZonePos = new Pose2d(-41, 11, Math.toRadians(45.0));
-        Pose2d tapeMark1 = new Pose2d(-39,29, Math.toRadians(90.0));
-        Pose2d tapeMark2 = new Pose2d(-50,29, Math.toRadians(90.0));
-        Pose2d tapeMark3 = new Pose2d(-53,29, Math.toRadians(125.0));
+        Pose2d startPos = new Pose2d(-38, -61, Math.toRadians(90.0));
+        Pose2d startOffWallPos = new Pose2d(-38, -57, Math.toRadians(90.0));
+        Pose2d netZonePos = new Pose2d(-47, -50, Math.toRadians(45.0));
+        Pose2d tapeMark1 = new Pose2d(-45.5,-46, Math.toRadians(90.0));
+        Pose2d tapeMark2 = new Pose2d(-57,-46, Math.toRadians(90.0));
+        Pose2d tapeMark3 = new Pose2d(-56,-43, Math.toRadians(120.0));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
@@ -81,7 +81,7 @@ public class NetZoneQuadBucket extends LinearOpMode {
         clawAssembly.setWristPos(0.66);
 
         if (isStopRequested()) return;
-        sleep(200);
+        sleep(100);
         if (isStopRequested()) return;
 
         Actions.runBlocking(new SequentialAction(driveFromStartToStartOffWallPos));
@@ -94,16 +94,17 @@ public class NetZoneQuadBucket extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(driveFromStartOffWallToNetPos));
 
         // Deliver the pre loaded sample in the bucket
-        liftAssembly.liftToTop();
+        liftAssembly.liftToTop(0.9);
         if (isStopRequested()) return;
-        sleep(200);
+        //sleep(200);
         if (isStopRequested()) return;
         clawAssembly.setWristPos(0.8);
         liftAssembly.slideToEncoderPos(2900);
         if (isStopRequested()) return;
         sleep(1400);
+        //liftAssembly.slideToEncoderPosBlocking(2900);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.60);
+        clawAssembly.setWristPos(0.50);
         if (isStopRequested()) return;
         sleep(300);
         if (isStopRequested()) return;
@@ -113,32 +114,30 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         clawAssembly.setWristPos(0.80);
         if (isStopRequested()) return;
-        sleep(500);
+        sleep(200);
         if (isStopRequested()) return;
-        liftAssembly.slideToEncoderPos(137);
+        liftAssembly.slideToEncoderPos(1500);
         if (isStopRequested()) return;
-        sleep(1400);
+        sleep(100);
         if (isStopRequested()) return;
         liftAssembly.liftToEncoderPos(-1100);
-        sleep(100);
+        //sleep(100);
 
         Actions.runBlocking(new SequentialAction(driveFromNetToTapeMark1Pos));
 
         if (isStopRequested()) return;
 
         // Pick up sample two off the floor
-        liftAssembly.liftToEncoderPos(-400);
+        liftAssembly.liftToEncoderPos(-600, 0.2);
         sleep(250);
-        //liftAssembly.slideToEncoderPos(740);
-        //sleep(250);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.9);
-        sleep(300);
+        clawAssembly.setWristPos(1.0);
+        sleep(100);
         liftAssembly.liftToEncoderPos(-490);
         sleep(400);
         if (isStopRequested()) return;
         clawAssembly.clawClose();
-        sleep(300);
+        sleep(100);
         liftAssembly.liftToEncoderPos(-1100);
         sleep(200);
         if (isStopRequested()) return;
@@ -149,7 +148,7 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
 
         // Deliver sample two in the bucket
-        liftAssembly.liftToTop();
+        liftAssembly.liftToTop(0.6);
         if (isStopRequested()) return;
         sleep(200);
         if (isStopRequested()) return;
@@ -158,9 +157,9 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         sleep(1000);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.60);
+        clawAssembly.setWristPos(0.50);
         if (isStopRequested()) return;
-        sleep(300);
+        sleep(200);
         if (isStopRequested()) return;
         clawAssembly.clawOpen();
         if (isStopRequested()) return;
@@ -168,11 +167,11 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         clawAssembly.setWristPos(0.80);
         if (isStopRequested()) return;
-        sleep(500);
+        sleep(200);
         if (isStopRequested()) return;
-        liftAssembly.slideToEncoderPos(137);
+        liftAssembly.slideToEncoderPos(1500);
         if (isStopRequested()) return;
-        sleep(1400);
+        sleep(100);
         if (isStopRequested()) return;
         liftAssembly.liftToEncoderPos(-1100);
         sleep(100);
@@ -182,29 +181,26 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
 
         // Pick up sample three off the floor
-        liftAssembly.liftToEncoderPos(-400);
+        liftAssembly.liftToEncoderPos(-600, 0.2);
         sleep(250);
-        //liftAssembly.slideToEncoderPos(740);
-        //sleep(250);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.9);
-        sleep(400);
+        clawAssembly.setWristPos(1.0);
+        sleep(100);
         liftAssembly.liftToEncoderPos(-490);
         sleep(400);
         if (isStopRequested()) return;
         clawAssembly.clawClose();
-        sleep(300);
+        sleep(100);
         liftAssembly.liftToEncoderPos(-1100);
-        sleep(300);
+        sleep(200);
         if (isStopRequested()) return;
-        liftAssembly.extendStabilityServo();
 
         Actions.runBlocking(new SequentialAction(driveFromTapeMark2ToNetZonePos));
 
         if (isStopRequested()) return;
 
         // Deliver sample three in the bucket
-        liftAssembly.liftToTop();
+        liftAssembly.liftToTop(0.6);
         if (isStopRequested()) return;
         sleep(200);
         if (isStopRequested()) return;
@@ -213,9 +209,9 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         sleep(1000);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.60);
+        clawAssembly.setWristPos(0.50);
         if (isStopRequested()) return;
-        sleep(300);
+        sleep(200);
         if (isStopRequested()) return;
         clawAssembly.clawOpen();
         if (isStopRequested()) return;
@@ -223,11 +219,11 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         clawAssembly.setWristPos(0.80);
         if (isStopRequested()) return;
-        sleep(500);
+        sleep(200);
         if (isStopRequested()) return;
-        liftAssembly.slideToEncoderPos(137);
+        liftAssembly.slideToEncoderPos(1500);
         if (isStopRequested()) return;
-        sleep(2400);
+        sleep(100);
         if (isStopRequested()) return;
         liftAssembly.liftToEncoderPos(-1100);
         if (isStopRequested()) return;
@@ -236,29 +232,27 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
 
         // Pick up sample four off the floor
-        liftAssembly.liftToEncoderPos(-400);
-        sleep(250);
-        //liftAssembly.slideToEncoderPos(740);
-        //sleep(250);
+        clawAssembly.setWristPos(1.0);
+        clawAssembly.setRotationPos(0.3);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.9);
-        sleep(300);
+        liftAssembly.liftToEncoderPos(-560, 0.2);
+        sleep(200);
         liftAssembly.liftToEncoderPos(-490);
         sleep(400);
         if (isStopRequested()) return;
         clawAssembly.clawClose();
         sleep(300);
-        liftAssembly.liftToEncoderPos(-1100);
+        liftAssembly.liftToEncoderPos(-800);
         sleep(200);
         if (isStopRequested()) return;
-        liftAssembly.extendStabilityServo();
 
         Actions.runBlocking(new SequentialAction(driveFromTapeMark3ToNetZonePos));
 
         if (isStopRequested()) return;
 
         // Deliver sample four in the bucket
-        liftAssembly.liftToTop();
+        clawAssembly.setRotationPos(0.5);
+        liftAssembly.liftToTop(0.6);
         if (isStopRequested()) return;
         sleep(200);
         if (isStopRequested()) return;
@@ -267,17 +261,17 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         sleep(1000);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.60);
+        clawAssembly.setWristPos(0.50);
         if (isStopRequested()) return;
-        sleep(300);
+        sleep(200);
         if (isStopRequested()) return;
         clawAssembly.clawOpen();
         if (isStopRequested()) return;
         sleep(100);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.80);
+        clawAssembly.setWristPos(1.0);
         if (isStopRequested()) return;
-        sleep(500);
+        sleep(200);
         if (isStopRequested()) return;
         liftAssembly.slideToEncoderPos(137);
         if (isStopRequested()) return;

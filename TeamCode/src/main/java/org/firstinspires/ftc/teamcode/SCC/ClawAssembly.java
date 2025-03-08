@@ -153,6 +153,10 @@ public class ClawAssembly {
         wristPitchServo.setPosition(wristPos);
     }
 
+    public void setRotationPos(double rotationPos){
+        wristRotationServo.setPosition(rotationPos);
+    }
+
     public void clawOpen() {
         // Open the claws
         leftClawServo.setPosition(0.73); // Smaller number is MORE open OLD 0.55

@@ -26,12 +26,13 @@ public class ObservationQuadChamber extends LinearOpMode {
         Pose2d submersibleTwoPos = new Pose2d(6, -42, Math.toRadians(270.0));
         Pose2d submersibleThreePos = new Pose2d(3, -42, Math.toRadians(270.0));
         Pose2d submersibleFourPos = new Pose2d(0, -42, Math.toRadians(270.0));
-        Pose2d specimenPos = new Pose2d(36, -55, Math.toRadians(270.0));
+        Pose2d specimenPos = new Pose2d(36, -55.25, Math.toRadians(270.0));
         Pose2d sampleOnePos = new Pose2d(26, -44, Math.toRadians(60.0));
         Pose2d sampleTwoPos = new Pose2d(38, -44, Math.toRadians(60.0));
         Pose2d observationSampleOnePos = new Pose2d(25, -44, Math.toRadians(-43.0));
         Pose2d observationSampleTwoPos = new Pose2d(38.5, -44, Math.toRadians(-43.0));
-        Pose2d parkPos = new Pose2d(28, -53, Math.toRadians(-40.0));
+        Pose2d parkPos = new Pose2d(28, -53, Math.toRadians(-50.0));
+        //Pose2d parkPos = new Pose2d(45, -55, Math.toRadians(-50.0));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
@@ -80,6 +81,12 @@ public class ObservationQuadChamber extends LinearOpMode {
                 //.strafeTo(new Vector2d(parkPos.position.x, parkPos.position.y))
                 .splineTo(new Vector2d(parkPos.position.x, parkPos.position.y), parkPos.heading)
                 .build();
+        /*Action driveFromSubmersibleFourToParkPos = drive.actionBuilder(submersibleFourPos)
+                //.strafeTo(new Vector2d(parkPos.position.x, parkPos.position.y))
+                .turnTo(parkPos.heading)
+                .strafeTo(new Vector2d(parkPos.position.x, parkPos.position.y))
+                //.splineTo(new Vector2d(parkPos.position.x, parkPos.position.y), parkPos.heading)
+                .build();*/
 
         // Wait for the DS start button to be touched.
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
@@ -247,26 +254,28 @@ public class ObservationQuadChamber extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(driveFromSpecimenToSubmersibleFourPos));
 
         // Deliver specimen four on submersible
-        clawAssembly.setWristPos(0.48);
+        clawAssembly.setWristPos(0.47);
         sleep(100);
         if (isStopRequested()) return;
         liftAssembly.liftToTop();
         if (isStopRequested()) return;
         liftAssembly.liftToTop();
         if (isStopRequested()) return;
-        liftAssembly.slideToEncoderPosBlocking(1565);
+        liftAssembly.slideToEncoderPosBlocking(1568);//1565);
+        clawAssembly.setWristPos(0.70);
         //if (isStopRequested()) return;
         //sleep(1000);
         if (isStopRequested()) return;
         clawAssembly.clawOpenHuge();
         sleep(100);
         if (isStopRequested()) return;
-        clawAssembly.setWristPos(0.54);
+        //clawAssembly.setWristPos(0.54);
         clawAssembly.clawClose();
         if (isStopRequested()) return;
         liftAssembly.liftToEncoderPos(-900);
         //clawAssembly.setWristPos(0.54);
         sleep(100);
+        liftAssembly.slideToEncoderPos(2800);
         Actions.runBlocking(new SequentialAction(driveFromSubmersibleFourToParkPos));
         //sleep(1000);
     }

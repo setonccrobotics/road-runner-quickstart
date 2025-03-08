@@ -153,6 +153,13 @@ public class LiftAssembly {
         liftMotor.setPower(0.9);
     }
 
+    public void liftToEncoderPos(int encoderPos, double power) {
+        liftMotor.setTargetPosition(encoderPos);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(power);
+    }
+
+
     public void slideToEncoderPos(int encoderPos) {
         slideMotor.setTargetPosition(encoderPos);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -199,6 +206,14 @@ public class LiftAssembly {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while (!liftTopSensor.isPressed()) {
             liftMotor.setPower(-0.8);
+        }
+        liftMotor.setPower(0.0);
+    }
+
+    public void liftToTop(double power) {
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while (!liftTopSensor.isPressed()) {
+            liftMotor.setPower(-1.0 * Math.abs(power));
         }
         liftMotor.setPower(0.0);
     }
