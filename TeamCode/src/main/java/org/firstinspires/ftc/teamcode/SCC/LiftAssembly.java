@@ -47,19 +47,19 @@ public class LiftAssembly {
         liftHomeSensor = hardwareMap.get(TouchSensor.class, "liftHomeSensor");
     }
 
-    public void run(Gamepad gamepad1, Gamepad gamepad2) {
-        if (gamepad2.right_trigger > 0.09
+    public void run(Gamepad gamepad1) {
+        if (gamepad1.right_bumper
                 && slideMotor.getCurrentPosition() < MAX_SLIDE_UPPER_ENCODER_POS) {
             // Extend the slide
             slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            slideMotor.setPower(gamepad2.right_trigger * 1.0);
+            slideMotor.setPower(1.0);
             previousSlidePosition = slideMotor.getCurrentPosition();
-        } else if (gamepad2.left_trigger > 0.09
+        } else if (gamepad1.left_bumper
                 && slideMotor.getCurrentPosition() > MIN_SLIDE_HOME_ENCODER_POS
                 && !slideHomeSensor.isPressed()) {
             // Retract the slide
             slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            slideMotor.setPower(gamepad2.left_trigger * -1.0);
+            slideMotor.setPower(-1.0);
             previousSlidePosition = slideMotor.getCurrentPosition();
         } else {
             if (!slideHomeSensor.isPressed()) {
@@ -72,7 +72,7 @@ public class LiftAssembly {
             }
         }
 
-        if (gamepad2.right_stick_y < 0.09 && !liftTopSensor.isPressed()) {
+        /*if (gamepad2.right_stick_y < 0.09 && !liftTopSensor.isPressed()) {
             liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             liftMotor.setPower(gamepad2.right_stick_y * 0.5);
             previousLiftPosition = liftMotor.getCurrentPosition();
@@ -81,6 +81,24 @@ public class LiftAssembly {
             liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             liftMotor.setPower(gamepad2
                     .right_stick_y * 0.5);
+            previousLiftPosition = liftMotor.getCurrentPosition();
+        }
+        else {
+            liftMotor.setTargetPosition(previousLiftPosition);
+            liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftMotor.setPower(0.3);
+
+        } */
+        if (gamepad1.right_trigger > 0.09 && !liftTopSensor.isPressed()) {
+            // going up when right trigger is pressed
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftMotor.setPower(gamepad1.right_trigger * -0.5);
+            previousLiftPosition = liftMotor.getCurrentPosition();
+        }
+        else if (gamepad1.left_trigger > 0.09 && !liftHomeSensor.isPressed()) {
+            // going down when left trigger is pressed
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftMotor.setPower(gamepad1.left_trigger * 0.5);
             previousLiftPosition = liftMotor.getCurrentPosition();
         }
         else {

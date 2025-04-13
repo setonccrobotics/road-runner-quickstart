@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="ObservationQuadChamber", group="SCC")
-public class ObservationQuadChamber extends LinearOpMode {
+@Autonomous(name="ShortObservationQuadChamber", group="SCC")
+public class ShortObservationQuadChamber extends LinearOpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
     @Override
@@ -22,7 +22,7 @@ public class ObservationQuadChamber extends LinearOpMode {
 
         // Define the field positions
         Pose2d startPos = new Pose2d(9, -61, Math.toRadians(270.0));
-        Pose2d submersiblePos = new Pose2d(9, -43.75, Math.toRadians(270.0));
+        Pose2d submersiblePos = new Pose2d(9, -43.5, Math.toRadians(270.0));
         Pose2d submersibleTwoPos = new Pose2d(6, -42, Math.toRadians(270.0));
         Pose2d submersibleThreePos = new Pose2d(3, -42, Math.toRadians(270.0));
         Pose2d submersibleFourPos = new Pose2d(0, -42, Math.toRadians(270.0));
@@ -124,7 +124,7 @@ public class ObservationQuadChamber extends LinearOpMode {
         //clawAssembly.clawOpen();
         clawAssembly.clawOpenHuge();
         sleep(100);
-        //if (isStopRequested()) return;
+        if (isStopRequested()) return;
         //clawAssembly.clawClose();
 
         // Prepare to swipe samples into observation zone

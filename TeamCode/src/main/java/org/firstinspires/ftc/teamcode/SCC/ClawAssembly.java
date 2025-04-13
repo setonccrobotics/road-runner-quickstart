@@ -167,6 +167,11 @@ public class ClawAssembly {
         leftClawServo.setPosition(0.84); // Bigger number is MORE closed OLD 0.65
         rightClawServo.setPosition(0.22); // Smaller number is MORE closed OLD 0.43
     }
+    public void openRight(){
+        //opens the right farthur
+        leftClawServo.setPosition(0.63);
+        rightClawServo.setPosition(0.33);
+    }
 
     public void clawOpenHuge() {
         // Open the claws

@@ -89,6 +89,7 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
 
         liftAssembly.zeroLiftOnly();
+        liftAssembly.extendStabilityServo();
 
         // Drive to the net zone
         Actions.runBlocking(new SequentialAction(driveFromStartOffWallToNetPos));
@@ -213,7 +214,8 @@ public class NetZoneQuadBucket extends LinearOpMode {
         if (isStopRequested()) return;
         sleep(200);
         if (isStopRequested()) return;
-        clawAssembly.clawOpen();
+        //clawAssembly.clawOpen();
+        clawAssembly.openRight();
         if (isStopRequested()) return;
         sleep(100);
         if (isStopRequested()) return;

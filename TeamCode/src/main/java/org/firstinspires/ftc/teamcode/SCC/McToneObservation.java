@@ -41,7 +41,7 @@ public class McToneObservation extends LinearOpMode {
 
             // Service the robot hardware
             overheadLift.run(gamepad1);
-            liftAssembly.run(gamepad1, gamepad2);
+            liftAssembly.run(gamepad1);
             clawAssembly.run(gamepad2, liftAssembly.slideMotorCurrentPosition());
 
             // Update the screen output with interesting data
