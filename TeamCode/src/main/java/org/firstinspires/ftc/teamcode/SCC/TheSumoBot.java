@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.SCC;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,6 +18,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * This is an example of a more complex path to really test the tuning.
  */
 @Autonomous(name="TheSumoBot", group="SCC")
+@Disabled
 public class TheSumoBot extends LinearOpMode {
     public DistanceSensor distanceSensor;
     public double currentDistance;

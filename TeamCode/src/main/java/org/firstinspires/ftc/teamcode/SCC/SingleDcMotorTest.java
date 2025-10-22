@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @TeleOp(name="SingleDcMotorTest", group="SCC")
-@Disabled
 public class SingleDcMotorTest extends LinearOpMode {
     private DcMotor driveMotor = null;
 

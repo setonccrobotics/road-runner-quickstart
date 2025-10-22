@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SCC;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name="TheDudeBot", group="SCC")
+@Disabled
 public class TheDudeBot extends LinearOpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 

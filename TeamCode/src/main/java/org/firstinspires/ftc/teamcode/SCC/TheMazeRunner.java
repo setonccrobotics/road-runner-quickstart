@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.SCC;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name="TheMazeRunner", group="SCC")
+@Disabled
 public class TheMazeRunner extends LinearOpMode {
     public DistanceSensor frontDistanceSensor;
     public DistanceSensor leftDistanceSensor;
