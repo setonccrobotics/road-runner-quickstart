@@ -5,37 +5,22 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@TeleOp(name="ThrowyMcThrowerFace", group="SCC")
+@TeleOp(name="WinnerMcWinnerFace", group="SCC")
 public class WinnerMcWinnerFace extends LinearOpMode {
     @Override
 
-    private CRServo inTakeLeft;
-
-    private CRServo inTakeRight;
-
-    private CRServo leftInside;
-
-    private CRServo rightInside;
-
-    private CRServo leftLauncher;
-
-    private CRServo rightLauncher;
-
-
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        //OverheadLift overheadLift = new OverheadLift(hardwareMap);
+        McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
 
         // Zero the robot
-        overheadLift.zero();
+        mcWinnerConveyor.zero();
 
         while (opModeIsActive()) {
             if (gamepad1.right_trigger > 0.2) {
@@ -57,7 +42,7 @@ public class WinnerMcWinnerFace extends LinearOpMode {
             // End drive robot with roadrunner via gamepad 1 input
 
             // Service the robot hardware
-            //overheadLift.run(gamepad1);
+            mcWinnerConveyor.run(gamepad1);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);

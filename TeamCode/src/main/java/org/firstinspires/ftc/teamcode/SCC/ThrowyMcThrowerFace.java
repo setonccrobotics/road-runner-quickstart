@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
@@ -15,13 +16,15 @@ public class ThrowyMcThrowerFace extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        //OverheadLift overheadLift = new OverheadLift(hardwareMap);
+        RobotLift robotLift = new RobotLift(hardwareMap);
+        McThrowyLauncher mcThrowyLauncher = new McThrowyLauncher(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
 
         // Zero the robot
-        //overheadLift.zero();
+        //robotLift.zero();
+        //mcThrowyLauncher.zero()
 
         while (opModeIsActive()) {
             if (gamepad1.right_trigger > 0.2) {
@@ -40,12 +43,15 @@ public class ThrowyMcThrowerFace extends LinearOpMode {
                     -gamepad1.right_stick_x * driveFactor
             ));
             drive.updatePoseEstimate();
+
             // End drive robot with roadrunner via gamepad 1 input
 
             // Service the robot hardware
-            //overheadLift.run(gamepad1);
+            robotLift.run(gamepad1);
+            mcThrowyLauncher.run(gamepad1);
 
             // Update the screen output with interesting data
+            mcThrowyLauncher.addTelemetry(telemetry);
             //telemetry.addData("heading", drive.pose.heading);
             //telemetry.addData("gamepad2.left_trigger", "%.2f", gamepad2.left_trigger);
             //telemetry.addData("gamepad2.right_trigger", "%.2f", gamepad2.right_trigger);
