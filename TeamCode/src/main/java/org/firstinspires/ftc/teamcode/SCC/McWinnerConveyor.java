@@ -62,7 +62,7 @@ public class McWinnerConveyor {
 
     public void run(Gamepad gamepad) {
         // Are we going up and has the upper limit not been reached?
-        if (gamepad.a){
+        if (gamepad.b){
             inTakeLeft.setPower(1.0);
             inTakeRight.setPower(1.0);
         } else {
@@ -70,7 +70,7 @@ public class McWinnerConveyor {
             inTakeRight.setPower(0.0);
         }
 
-        if (gamepad.b){
+        if (gamepad.a){
             outTakeLeft.setPower(1.0);
             outTakeRight.setPower(1.0);
         } else {
@@ -79,19 +79,13 @@ public class McWinnerConveyor {
         }
 
         if (gamepad.y){
-            sweepLeft.setPosition(0.4);
-            sweepRight.setPosition(0.4);
-        } else {
-            sweepLeft.setPosition(0.5);
-            sweepRight.setPosition(0.5);
+            sweepLeft.setPosition(0.3);
+            sweepRight.setPosition(0.3);
         }
 
         if (gamepad.x){
-            sweepLeft.setPosition(0.6);
-            sweepRight.setPosition(0.6);
-        } else {
-            sweepLeft.setPosition(0.5);
-            sweepRight.setPosition(0.5);
+            sweepLeft.setPosition(0.7);
+            sweepRight.setPosition(0.7);
         }
 
         if (gamepad.right_bumper && launchToggleTimer.milliseconds() > 1000) {
