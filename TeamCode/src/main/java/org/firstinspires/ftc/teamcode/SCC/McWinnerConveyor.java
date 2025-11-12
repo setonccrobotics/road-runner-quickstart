@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SCC;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,10 +22,12 @@ public class McWinnerConveyor {
     private Servo sweepLeft;
     private Servo sweepRight;
 
-    private DcMotor launcherMotor;
+    private DcMotorEx launcherMotor;
 
     private boolean launchToggle = false;
     private ElapsedTime launchToggleTimer = new ElapsedTime();
+
+    private double launchVelocity = 1600;
 
     public McWinnerConveyor(HardwareMap hardwareMap) {
         // Configure the hardware map
@@ -40,7 +43,7 @@ public class McWinnerConveyor {
                 "sweepLeft");
         sweepRight = hardwareMap.get(Servo.class,
                 "sweepRight");
-        launcherMotor = hardwareMap.get(DcMotor.class,
+        launcherMotor = hardwareMap.get(DcMotorEx.class,
                 "launcherMotor");
 
         // Configure the motor
@@ -60,7 +63,7 @@ public class McWinnerConveyor {
         sweepRight.setPosition(0.5);
     }
 
-    public void run(Gamepad gamepad) {
+    public void run(Gamepad gamepad, RobotVision robotVision) {
         // Are we going up and has the upper limit not been reached?
         if (gamepad.b){
             inTakeLeft.setPower(1.0);
@@ -92,15 +95,20 @@ public class McWinnerConveyor {
             launchToggle = !launchToggle;
             launchToggleTimer.reset();
         }
-        if (launchToggle){
-            launcherMotor.setPower(1.0);
-        } else {
-            launcherMotor.setPower(0.0);
-        }
 
+        if (gamepad.dpad_up)
+            launchVelocity += 4.0;
+        else if (gamepad.dpad_down)
+            launchVelocity -= 4.0;
+
+        if (launchToggle){
+          //launcherMotor.setPower(((robotVision.getDistance() * 0.28)/100) + 0.7);
+            launcherMotor.setVelocity(launchVelocity);
+        }
     }
 
     public void addTelemetry(Telemetry telemetry) {
-
+        telemetry.addData("launchVelocity", "%.2f", launchVelocity);
+        //telemetry.update();
     }
 }

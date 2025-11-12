@@ -14,8 +14,8 @@ public class WinnerMcWinnerFace extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         RobotVision robotVision = new RobotVision();
+        McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
@@ -44,13 +44,14 @@ public class WinnerMcWinnerFace extends LinearOpMode {
             // End drive robot with roadrunner via gamepad 1 input
 
             // Service the robot hardware
-            mcWinnerConveyor.run(gamepad2);
-            robotVision.run(telemetry);
+            mcWinnerConveyor.run(gamepad2, robotVision);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);
             //telemetry.addData("gamepad2.left_trigger", "%.2f", gamepad2.left_trigger);
             //telemetry.addData("gamepad2.right_trigger", "%.2f", gamepad2.right_trigger);
+            mcWinnerConveyor.addTelemetry(telemetry);
+            robotVision.run(telemetry);
             telemetry.update();
         }
     }
