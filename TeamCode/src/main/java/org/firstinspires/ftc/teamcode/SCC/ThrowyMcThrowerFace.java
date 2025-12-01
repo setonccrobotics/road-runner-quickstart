@@ -48,7 +48,7 @@ public class ThrowyMcThrowerFace extends LinearOpMode {
 
             // Service the robot hardware
             robotLift.run(gamepad1);
-            mcThrowyLauncher.run(gamepad1);
+            mcThrowyLauncher.run(gamepad2);
 
             // Update the screen output with interesting data
             mcThrowyLauncher.addTelemetry(telemetry);

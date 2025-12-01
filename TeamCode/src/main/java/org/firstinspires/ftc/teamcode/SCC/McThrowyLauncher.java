@@ -14,8 +14,8 @@ public class McThrowyLauncher {
     private Servo launchAimServoRight;
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   160;     // period of each cycle
-    static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    static final double MAX_POS     =  0.85;     // Maximum position (software limit: 0.85)
+    static final double MIN_POS     =  0.25;     // Minimum position (software limit: 0.15)
     double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
 
     public McThrowyLauncher(HardwareMap hardwareMap) {
@@ -31,26 +31,28 @@ public class McThrowyLauncher {
                 "launchAimServoRight");
 
         // Configure the motor
-        launchMotorLeft.setDirection(DcMotor.Direction.FORWARD);
-        launchMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        launchMotorLeft.setDirection(DcMotor.Direction.REVERSE);
+        launchMotorRight.setDirection(DcMotor.Direction.FORWARD);
         launchAimServoLeft.setDirection(Servo.Direction.FORWARD);
-        launchAimServoRight.setDirection(Servo.Direction.REVERSE);
+        launchAimServoRight.setDirection(Servo.Direction.FORWARD);
     }
 
     public void zero() {
         // Zero the linear actuators
+        launchAimServoRight.setPosition(MIN_POS);
+        launchAimServoLeft.setPosition(MIN_POS);
     }
 
     public void run(Gamepad gamepad) {
         // slew the servo, according to the rampUp (direction) variable.
-        if (gamepad.y) {
+        if (gamepad.dpad_up) {
             // Keep stepping up until we hit the max value.
             position += INCREMENT ;
             if (position >= MAX_POS ) {
                 position = MAX_POS;
             }
         }
-        else if (gamepad.a) {
+        else if (gamepad.dpad_down) {
             // Keep stepping down until we hit the min value.
             position -= INCREMENT ;
             if (position <= MIN_POS ) {
@@ -60,13 +62,25 @@ public class McThrowyLauncher {
 
         // Set the servo to the new position and pause;
         launchAimServoRight.setPosition(position);
-        //sleep(CYCLE_MS);
+        launchAimServoLeft.setPosition(position);
+
+        // Turn on the launch motor
+        if (gamepad.y) {
+            launchMotorLeft.setPower(0.5);
+            launchMotorRight.setPower(0.5);
+        } else if (gamepad.x) {
+            launchMotorLeft.setPower(0.0);
+            launchMotorRight.setPower(0.0);
+        }
     }
 
     public void addTelemetry(Telemetry telemetry) {
-        telemetry.addData("launchAimServoLeft Pos", "%7d",
-                launchAimServoLeft.getPosition());
-        telemetry.addData("launchAimServoRight Pos", "%7d",
-                launchAimServoRight.getPosition());
+        double launchAimServoLeftPos = 0.0;
+        launchAimServoLeftPos = launchAimServoLeft.getPosition();
+        double launchAimServoRightPos = 0.0;
+        launchAimServoRightPos = launchAimServoRight.getPosition();
+
+        telemetry.addData("launchAimServoLeft Pos", "%7f", launchAimServoLeftPos);
+        telemetry.addData("launchAimServoRight Pos", "%7f", launchAimServoRightPos);
     }
 }
