@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,6 +13,7 @@ public class McThrowyLauncher {
     private DcMotor launchMotorRight = null;
     private Servo launchAimServoLeft;
     private Servo launchAimServoRight;
+    private CRServo conveyorBeltServo;
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   160;     // period of each cycle
     static final double MAX_POS     =  0.85;     // Maximum position (software limit: 0.85)
@@ -30,6 +32,9 @@ public class McThrowyLauncher {
         launchAimServoRight = hardwareMap.get(Servo.class,
                 "launchAimServoRight");
 
+        conveyorBeltServo = hardwareMap.get(CRServo.class,
+                "conveyorBeltServo");
+
         // Configure the motor
         launchMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         launchMotorRight.setDirection(DcMotor.Direction.FORWARD);
@@ -47,15 +52,14 @@ public class McThrowyLauncher {
         // slew the servo, according to the rampUp (direction) variable.
         if (gamepad.dpad_up) {
             // Keep stepping up until we hit the max value.
-            position += INCREMENT ;
-            if (position >= MAX_POS ) {
+            position += INCREMENT;
+            if (position >= MAX_POS) {
                 position = MAX_POS;
             }
-        }
-        else if (gamepad.dpad_down) {
+        } else if (gamepad.dpad_down) {
             // Keep stepping down until we hit the min value.
-            position -= INCREMENT ;
-            if (position <= MIN_POS ) {
+            position -= INCREMENT;
+            if (position <= MIN_POS) {
                 position = MIN_POS;
             }
         }
@@ -66,11 +70,19 @@ public class McThrowyLauncher {
 
         // Turn on the launch motor
         if (gamepad.y) {
-            launchMotorLeft.setPower(0.5);
-            launchMotorRight.setPower(0.5);
+            launchMotorLeft.setPower(1.0);
+            launchMotorRight.setPower(1.0);
         } else if (gamepad.x) {
             launchMotorLeft.setPower(0.0);
             launchMotorRight.setPower(0.0);
+        }
+
+        if (gamepad.right_bumper) {
+            conveyorBeltServo.setPower(1.0);
+        } else if (gamepad.left_bumper) {
+            conveyorBeltServo.setPower(-1.0);
+        } else {
+            conveyorBeltServo.setPower(0.0);
         }
     }
 

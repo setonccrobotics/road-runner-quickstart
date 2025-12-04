@@ -15,6 +15,7 @@ public class WinnerMcWinnerFace extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         RobotVision robotVision = new RobotVision();
+        //McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         double driveFactor = 0.5;
 
@@ -27,10 +28,11 @@ public class WinnerMcWinnerFace extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.right_trigger > 0.2) {
                 driveFactor = 0.25;
-            } else if (gamepad1.left_trigger > 0.2) {
-                driveFactor = 1.0;
             } else {
-                driveFactor = 0.5;
+                driveFactor = 1.0;
+            }
+            if (gamepad1.left_trigger > 0.2) {
+                driveFactor *= -1.0;
             }
             // Drive the robot with roadrunner via gamepad 1 input
             drive.setDrivePowers(new PoseVelocity2d(

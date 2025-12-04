@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class McWinnerConveyor {
+public class McWinnerLaunchDebug {
     private CRServo inTakeLeft;
 
     private CRServo inTakeRight;
@@ -25,13 +25,11 @@ public class McWinnerConveyor {
     private DcMotorEx launcherMotor;
 
     private boolean launchToggle = false;
-
     private ElapsedTime launchToggleTimer = new ElapsedTime();
-    private boolean yToggle = false;
-    private ElapsedTime yToggleTimer = new ElapsedTime();
-    private double launchVelocity = 1800;
 
-    public McWinnerConveyor(HardwareMap hardwareMap) {
+    private double launchVelocity = 1600;
+
+    public McWinnerLaunchDebug(HardwareMap hardwareMap) {
         // Configure the hardware map
         inTakeLeft = hardwareMap.get(CRServo.class,
                 "intakeLeft");
@@ -61,13 +59,13 @@ public class McWinnerConveyor {
     }
 
     public void zero() {
-        sweepLeft.setPosition(0.7);
-        sweepRight.setPosition(0.7);
+        sweepLeft.setPosition(0.5);
+        sweepRight.setPosition(0.5);
     }
 
     public void run(Gamepad gamepad, RobotVision robotVision) {
         // Are we going up and has the upper limit not been reached?
-        if (gamepad.a){
+        if (gamepad.b){
             inTakeLeft.setPower(1.0);
             inTakeRight.setPower(1.0);
         } else {
@@ -75,7 +73,7 @@ public class McWinnerConveyor {
             inTakeRight.setPower(0.0);
         }
 
-        if (gamepad.b){
+        if (gamepad.a){
             outTakeLeft.setPower(1.0);
             outTakeRight.setPower(1.0);
         } else {
@@ -83,15 +81,12 @@ public class McWinnerConveyor {
             outTakeRight.setPower(0.0);
         }
 
-        if (gamepad.y && yToggleTimer.milliseconds() > 500) {
-            yToggle = !yToggle;
-            yToggleTimer.reset();
-        }
-
-        if (yToggle){
+        if (gamepad.y){
             sweepLeft.setPosition(0.3);
             sweepRight.setPosition(0.3);
-        } else {
+        }
+
+        if (gamepad.x){
             sweepLeft.setPosition(0.7);
             sweepRight.setPosition(0.7);
         }
@@ -101,13 +96,15 @@ public class McWinnerConveyor {
             launchToggleTimer.reset();
         }
 
+        double targetDistance = robotVision.getDistance();
+
         if (launchToggle) {
-            double targetDistance = robotVision.getDistance();
             if (targetDistance > 0.0) {
-                launchVelocity = ((targetDistance * 9.4)) + 1425;
+                launchVelocity = ((targetDistance * 9.4)) + 1450;
             }
             launcherMotor.setVelocity(launchVelocity);
-        } else {
+        }
+        else {
             launcherMotor.setVelocity(0.0);
         }
     }
