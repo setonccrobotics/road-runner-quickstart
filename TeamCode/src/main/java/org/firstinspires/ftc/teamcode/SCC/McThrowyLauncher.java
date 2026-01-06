@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SCC;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -36,8 +37,8 @@ public class McThrowyLauncher {
                 "conveyorBeltServo");
 
         // Configure the motor
-        launchMotorLeft.setDirection(DcMotor.Direction.REVERSE);
-        launchMotorRight.setDirection(DcMotor.Direction.FORWARD);
+        launchMotorLeft.setDirection(DcMotor.Direction.FORWARD);
+        launchMotorRight.setDirection(DcMotor.Direction.REVERSE);
         launchAimServoLeft.setDirection(Servo.Direction.FORWARD);
         launchAimServoRight.setDirection(Servo.Direction.FORWARD);
     }

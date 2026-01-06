@@ -25,7 +25,6 @@ public class McWinnerConveyor {
     private DcMotorEx launcherMotor;
 
     private boolean launchToggle = false;
-
     private ElapsedTime launchToggleTimer = new ElapsedTime();
     private boolean yToggle = false;
     private ElapsedTime yToggleTimer = new ElapsedTime();

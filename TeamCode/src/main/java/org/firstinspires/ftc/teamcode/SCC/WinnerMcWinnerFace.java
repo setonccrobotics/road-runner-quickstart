@@ -15,7 +15,7 @@ public class WinnerMcWinnerFace extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         RobotVision robotVision = new RobotVision();
-        //McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
+        //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
         McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
         double driveFactor = 0.5;
 
