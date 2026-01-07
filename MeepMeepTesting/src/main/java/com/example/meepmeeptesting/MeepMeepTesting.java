@@ -13,11 +13,11 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(700);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(-64, -54, Math.toRadians(40));
-        Pose2d launchPosOne = new Pose2d(-32, -48, Math.toRadians(40));
+        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
+        Pose2d launchPosOne = new Pose2d(-58.7, -16.1, Math.toRadians(54));
         //Pose2d parkPos = new Pose2d(45, -55, Math.toRadians(-50.0));
 
         // Create a drive object for meep meep
