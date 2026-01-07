@@ -17,12 +17,14 @@ public class WinnerMcWinnerFace extends LinearOpMode {
         RobotVision robotVision = new RobotVision();
         //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
         McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
+        RobotLift robotLift = new RobotLift(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
 
         // Zero the robot
         mcWinnerConveyor.zero();
+        robotLift.zero();
         robotVision.zero(hardwareMap);
 
         while (opModeIsActive()) {
@@ -47,12 +49,14 @@ public class WinnerMcWinnerFace extends LinearOpMode {
 
             // Service the robot hardware
             mcWinnerConveyor.run(gamepad2, robotVision);
+            robotLift.run(gamepad1);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);
             //telemetry.addData("gamepad2.left_trigger", "%.2f", gamepad2.left_trigger);
             //telemetry.addData("gamepad2.right_trigger", "%.2f", gamepad2.right_trigger);
             mcWinnerConveyor.addTelemetry(telemetry);
+            robotLift.addTelemetry(telemetry);
             robotVision.run(telemetry);
             telemetry.update();
         }

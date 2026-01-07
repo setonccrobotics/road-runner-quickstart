@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -22,20 +23,20 @@ public class RobotLift {
     public RobotLift(HardwareMap hardwareMap) {
         // Configure the hardware map
         robotLiftMotorLeft = hardwareMap.get(DcMotor.class,
-                "robotLiftMotorA");
+                "robotLiftMotorLeft");
         robotLiftHomeSensorLeft = hardwareMap.get(TouchSensor.class,
-                "robotLiftHomeSensorA");
+                "robotLiftHomeSensorLeft");
         robotLiftMotorRight = hardwareMap.get(DcMotor.class,
-                "robotLiftMotorB");
+                "robotLiftMotorRight");
         robotLiftHomeSensorRight = hardwareMap.get(TouchSensor.class,
-                "robotLiftHomeSensorB");
+                "robotLiftHomeSensorRight");
 
         // Configure the motor
         robotLiftMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         robotLiftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robotLiftMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robotLiftMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robotLiftMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        robotLiftMotorRight.setDirection(DcMotor.Direction.FORWARD);
         robotLiftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robotLiftMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robotLiftMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
