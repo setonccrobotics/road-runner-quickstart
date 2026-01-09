@@ -108,9 +108,9 @@ public class McWinnerLaunchDebug {
         }
 
         if (gamepad.dpad_up) {
-            launchVelocity += 15;
+            launchVelocity += 1;
         } else if (gamepad.dpad_down) {
-            launchVelocity -= 15;
+            launchVelocity -= 1;
         }
         if (launchToggle) {
             //double targetDistance = robotVision.getDistance();

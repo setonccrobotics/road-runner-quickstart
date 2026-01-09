@@ -30,6 +30,8 @@ public class McWinnerConveyor {
     private ElapsedTime yToggleTimer = new ElapsedTime();
     private double launchVelocity = 1800;
 
+    private double currentTargetDistance = 48.0;
+
     public McWinnerConveyor(HardwareMap hardwareMap) {
         // Configure the hardware map
         inTakeLeft = hardwareMap.get(CRServo.class,
@@ -109,6 +111,55 @@ public class McWinnerConveyor {
         } else {
             launcherMotor.setVelocity(0.0);
         }
+    }
+
+    public void turnConveyorOn() {
+        inTakeLeft.setPower(1.0);
+        inTakeRight.setPower(1.0);
+        outTakeLeft.setPower(1.0);
+        outTakeRight.setPower(1.0);
+    }
+
+    public void turnConveyorOff() {
+        inTakeLeft.setPower(0.0);
+        inTakeRight.setPower(0.0);
+        outTakeLeft.setPower(0.0);
+        outTakeRight.setPower(0.0);
+    }
+
+    public boolean launchBall() {
+        if (launchToggleTimer.milliseconds() > 1000) {
+            launchToggleTimer.reset();
+
+            sweepLeft.setPosition(0.3);
+            sweepRight.setPosition(0.3);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean launchGateOpen() {
+        if (launchToggleTimer.milliseconds() < 1000) {
+            sweepLeft.setPosition(0.7);
+            sweepRight.setPosition(0.7);
+            return true;
+        }
+        return false;
+    }
+
+    public void updateTargetDistance(RobotVision robotVision) {
+        double targetDistance = robotVision.getDistance();
+        if (targetDistance > 0.0) {
+            currentTargetDistance = ((targetDistance * 9.4)) + 1425;
+        }
+    }
+
+    public void launchMotorOn() {
+        launcherMotor.setVelocity(currentTargetDistance);
+    }
+
+    public void launchMotorOff() {
+        launcherMotor.setVelocity(0.0);
     }
 
     public void addTelemetry(Telemetry telemetry) {

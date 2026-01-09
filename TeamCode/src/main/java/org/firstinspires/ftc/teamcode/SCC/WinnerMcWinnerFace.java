@@ -36,14 +36,64 @@ public class WinnerMcWinnerFace extends LinearOpMode {
             if (gamepad1.left_trigger > 0.2) {
                 driveFactor *= -1.0;
             }
-            // Drive the robot with roadrunner via gamepad 1 input
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y * driveFactor,
-                            -gamepad1.left_stick_x * driveFactor
-                    ),
-                    -gamepad1.right_stick_x * driveFactor
-            ));
+            if (gamepad1.a) {
+                // Enter auto aiming mode
+                double leftOffset = robotVision.getLeftOffset();
+                double distance = robotVision.getDistance();
+                int id = robotVision.getTagId();
+                double upperOffset = 1.0;
+                double lowerOffset = -1.0;
+                if (distance > 100) {
+                    if (id == 20) {
+                        // Blue
+                        upperOffset = -4.0;
+                        lowerOffset = -6.0;
+                    } else {
+                        // Red
+                        upperOffset = 6.0;
+                        lowerOffset = 4.0;
+                    }
+                }
+
+                // Should we turn to the left
+                if (leftOffset > upperOffset) {
+                    // Yes, spin to the left
+                    drive.setDrivePowers(new PoseVelocity2d(
+                            new Vector2d(
+                                    0.0,
+                                    0.0
+                            ),
+                            0.1
+                    ));
+                } else if (leftOffset < lowerOffset) {
+                    // No, spin to the right
+                    drive.setDrivePowers(new PoseVelocity2d(
+                            new Vector2d(
+                                    0.0,
+                                    0.0
+                            ),
+                            -0.1
+                    ));
+                } else {
+                    // No, spin to the right
+                    drive.setDrivePowers(new PoseVelocity2d(
+                            new Vector2d(
+                                    0.0,
+                                    0.0
+                            ),
+                            0.0
+                    ));
+                }
+            } else {
+                // Drive the robot with roadrunner via gamepad 1 input
+                drive.setDrivePowers(new PoseVelocity2d(
+                        new Vector2d(
+                                -gamepad1.left_stick_y * driveFactor,
+                                -gamepad1.left_stick_x * driveFactor
+                        ),
+                        -gamepad1.right_stick_x * driveFactor
+                ));
+            }
             drive.updatePoseEstimate();
             // End drive robot with roadrunner via gamepad 1 input
 

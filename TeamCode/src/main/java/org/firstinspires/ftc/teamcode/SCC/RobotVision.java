@@ -89,8 +89,18 @@ public class RobotVision {
     {
         if (aprilTag.getDetections().isEmpty())
             return lastLeftOffset;
-        lastLeftOffset = aprilTag.getDetections().get(0).ftcPose.x;
+        if (aprilTag.getDetections().get(0).id == 20
+                || aprilTag.getDetections().get(0).id == 24 ) {
+            lastLeftOffset = aprilTag.getDetections().get(0).ftcPose.x;
+        }
         return lastLeftOffset;
+    }
+
+    public int getTagId()
+    {
+        if (aprilTag.getDetections().isEmpty())
+            return 0;
+        return aprilTag.getDetections().get(0).id;
     }
 
     private void telemetryAprilTag(Telemetry telemetry) {
