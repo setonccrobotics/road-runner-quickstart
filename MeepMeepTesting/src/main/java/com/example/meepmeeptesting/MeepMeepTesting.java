@@ -17,8 +17,8 @@ public class MeepMeepTesting {
 
         // Define the field positions
         Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-58.7, -16.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-15, -55, Math.toRadians(-54));
+        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
+        Pose2d parkPos = new Pose2d(-25, -30, Math.toRadians(54));
 
         // Create a drive object for meep meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -30,11 +30,11 @@ public class MeepMeepTesting {
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .lineToY(launchPosOne.position.y)
+                .splineTo(launchPosOne.position, launchPosOne.heading)
                 .build();
 
         Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
-                .splineTo(parkPos.position, parkPos.heading)
+                .splineTo(parkPos.position)
                 .build();
 
 
