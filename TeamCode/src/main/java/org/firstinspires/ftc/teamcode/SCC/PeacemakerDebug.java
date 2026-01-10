@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@TeleOp(name="McWinnerDebug", group="SCC")
-public class McWinnerDebug extends LinearOpMode {
+@TeleOp(name="PeacemakerDebug", group="SCC")
+public class PeacemakerDebug extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
 
     @Override

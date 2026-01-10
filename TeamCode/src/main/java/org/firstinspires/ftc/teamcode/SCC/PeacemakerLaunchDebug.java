@@ -9,7 +9,6 @@ package org.firstinspires.ftc.teamcode.SCC;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class McWinnerLaunchDebug {
+public class PeacemakerLaunchDebug {
     private CRServo inTakeLeft;
 
     private CRServo inTakeRight;
@@ -37,7 +36,7 @@ public class McWinnerLaunchDebug {
     private ElapsedTime yToggleTimer = new ElapsedTime();
     private double launchVelocity = 1800;
 
-    public McWinnerLaunchDebug(HardwareMap hardwareMap) {
+    public PeacemakerLaunchDebug(HardwareMap hardwareMap) {
         // Configure the hardware map
         inTakeLeft = hardwareMap.get(CRServo.class,
                 "intakeLeft");

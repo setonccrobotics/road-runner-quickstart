@@ -8,23 +8,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@TeleOp(name="WinnerMcWinnerFace", group="SCC")
-public class WinnerMcWinnerFace extends LinearOpMode {
+@TeleOp(name="Peacemaker", group="SCC")
+public class Peacemaker extends LinearOpMode {
     @Override
 
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         RobotVision robotVision = new RobotVision();
         //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
-        McWinnerConveyor mcWinnerConveyor = new McWinnerConveyor(hardwareMap);
+        RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
         RobotLift robotLift = new RobotLift(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
 
         // Zero the robot
-        mcWinnerConveyor.zero();
-        robotLift.zero();
+        robotConveyor.zero();
+        //robotLift.zero();
         robotVision.zero(hardwareMap);
 
         while (opModeIsActive()) {
@@ -39,11 +39,11 @@ public class WinnerMcWinnerFace extends LinearOpMode {
             if (gamepad1.a) {
                 // Enter auto aiming mode
                 double leftOffset = robotVision.getLeftOffset();
-                double distance = robotVision.getDistance();
+                //double distance = robotVision.getDistance();
                 int id = robotVision.getTagId();
                 double upperOffset = 1.0;
                 double lowerOffset = -1.0;
-                if (distance > 100) {
+                /*if (distance > 100) {
                     if (id == 20) {
                         // Blue
                         upperOffset = -4.0;
@@ -53,7 +53,7 @@ public class WinnerMcWinnerFace extends LinearOpMode {
                         upperOffset = 6.0;
                         lowerOffset = 4.0;
                     }
-                }
+                }*/
 
                 // Should we turn to the left
                 if (leftOffset > upperOffset) {
@@ -98,17 +98,17 @@ public class WinnerMcWinnerFace extends LinearOpMode {
             // End drive robot with roadrunner via gamepad 1 input
 
             // Service the robot hardware
-            mcWinnerConveyor.run(gamepad2, robotVision);
+            robotConveyor.run(gamepad2, robotVision);
             robotLift.run(gamepad1);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);
             //telemetry.addData("gamepad2.left_trigger", "%.2f", gamepad2.left_trigger);
             //telemetry.addData("gamepad2.right_trigger", "%.2f", gamepad2.right_trigger);
-            mcWinnerConveyor.addTelemetry(telemetry);
-            robotLift.addTelemetry(telemetry);
-            robotVision.run(telemetry);
-            telemetry.update();
+            ///robotConveyor.addTelemetry(telemetry);
+            //robotLift.addTelemetry(telemetry);
+            //robotVision.run(telemetry);
+            //telemetry.update();
         }
     }
 }
