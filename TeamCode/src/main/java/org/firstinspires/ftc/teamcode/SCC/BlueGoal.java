@@ -24,13 +24,18 @@ public class BlueGoal extends LinearOpMode {
 
         // Define the field positions
         Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-58.7, -16.1, Math.toRadians(54));
+        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
+        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .lineToY(launchPosOne.position.y)
+                .splineTo(launchPosOne.position, launchPosOne.heading)
+                .build();
+
+        Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
+                .splineTo(parkPos.position, parkPos.heading)
                 .build();
 
         // Wait for the DS start button to be touched.
@@ -69,6 +74,9 @@ public class BlueGoal extends LinearOpMode {
                 successfulBallLaunchCount++;
         }
         robotConveyor.launchMotorOff();
+
+        // Drive from the launch position to park position
+        Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
 
         sleep(5000);
     }
