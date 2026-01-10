@@ -1,24 +1,21 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class MeepMeepTesting {
+public class MeepMeepRedGoal {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
+        Pose2d startPos = new Pose2d(-58, 43, Math.toRadians(-54));
+        Pose2d launchPosOne = new Pose2d(-35, 19.1, Math.toRadians(-54));
+        Pose2d parkPos = new Pose2d(-25, 50, Math.toRadians(90));
 
         // Create a drive object for meep meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -30,7 +27,7 @@ public class MeepMeepTesting {
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .splineTo(launchPosOne.position, launchPosOne.heading)
+                .strafeTo(launchPosOne.position)
                 .build();
 
         Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)

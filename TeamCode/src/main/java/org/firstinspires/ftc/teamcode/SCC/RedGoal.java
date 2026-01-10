@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="BlueGoal", group="SCC")
+@Autonomous(name="RedGoal", group="SCC")
 @Disabled
-public class BlueGoal extends LinearOpMode {
+public class RedGoal extends LinearOpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
     private RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
 
@@ -23,9 +23,9 @@ public class BlueGoal extends LinearOpMode {
         RobotLift robotLift = new RobotLift(hardwareMap);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
+        Pose2d startPos = new Pose2d(-58, 43, Math.toRadians(-54));
+        Pose2d launchPosOne = new Pose2d(-35, 19.1, Math.toRadians(-54));
+        Pose2d parkPos = new Pose2d(-25, 50, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
