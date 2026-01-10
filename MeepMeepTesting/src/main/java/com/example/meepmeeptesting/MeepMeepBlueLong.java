@@ -13,9 +13,9 @@ public class MeepMeepBlueLong {
         MeepMeep meepMeep = new MeepMeep(700);
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-35, -19.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
+        Pose2d startPos = new Pose2d(61, -8, Math.toRadians(180));
+        Pose2d launchPosOne = new Pose2d(53, -12, Math.toRadians(210));
+        Pose2d parkPos = new Pose2d(38, -16, Math.toRadians(-90));
 
         // Create a drive object for meep meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -27,7 +27,7 @@ public class MeepMeepBlueLong {
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .strafeTo(launchPosOne.position)
+                .splineTo(launchPosOne.position, launchPosOne.heading)
                 .build();
 
         Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
@@ -37,8 +37,8 @@ public class MeepMeepBlueLong {
 
         // Define the order of actions
         Action runAuto = new SequentialAction(
-                driveFromStartToLaunchPosOne,
-                driveFromLaunchPosOneToPark);
+                driveFromStartToLaunchPosOne);
+                //driveFromLaunchPosOneToPark);
 
         // Run the auto program
         myBot.runAction(runAuto);
