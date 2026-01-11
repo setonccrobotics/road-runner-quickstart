@@ -106,7 +106,21 @@ public class RobotConveyor {
             ballPickup();
         }
 
-        if (gamepad.right_trigger > 0.2 && launchButtonToggleTimer.milliseconds() > 500) {
+        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
+            launchButtonToggle = !launchButtonToggle;
+            launchButtonToggleTimer.reset();
+        }
+
+        if (launchButtonToggle){
+            sweepLeft.setPosition(0.3);
+            sweepRight.setPosition(0.3);
+        } else {
+            sweepLeft.setPosition(0.7);
+            sweepRight.setPosition(0.7);
+        }
+
+        /*
+        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
             launchButtonToggle = !launchButtonToggle;
             launchButtonToggleTimer.reset();
         } else if (launchInProcess && launchButtonToggleTimer.milliseconds() > 500) {
@@ -123,8 +137,8 @@ public class RobotConveyor {
             sweepLeft.setPosition(0.7);
             sweepRight.setPosition(0.7);
         }
-
-        if (gamepad.left_trigger > 0.2 && launchToggleTimer.milliseconds() > 1000) {
+*/
+        if (gamepad.x && launchToggleTimer.milliseconds() > 1000) {
             launchToggle = !launchToggle;
             launchToggleTimer.reset();
         }
