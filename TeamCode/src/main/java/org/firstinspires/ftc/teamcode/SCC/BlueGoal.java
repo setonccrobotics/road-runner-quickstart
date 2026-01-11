@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous(name="BlueGoal", group="SCC")
-@Disabled
 public class BlueGoal extends LinearOpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
     private RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);

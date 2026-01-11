@@ -106,7 +106,7 @@ public class RobotConveyor {
             ballPickup();
         }
 
-        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
+        if (gamepad.right_bumper && launchButtonToggleTimer.milliseconds() > 500) {
             launchButtonToggle = !launchButtonToggle;
             launchButtonToggleTimer.reset();
         }
