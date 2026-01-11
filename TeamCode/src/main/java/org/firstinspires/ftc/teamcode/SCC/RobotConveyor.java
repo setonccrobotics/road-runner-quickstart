@@ -190,30 +190,27 @@ public class RobotConveyor {
     }
 
     public boolean launchBall() {
-        if (launchToggleTimer.milliseconds() > 1000) {
-            launchToggleTimer.reset();
-
-            sweepLeft.setPosition(0.3);
-            sweepRight.setPosition(0.3);
-            return true;
-        }
-        return false;
+        sweepLeft.setPosition(0.3);
+        sweepRight.setPosition(0.3);
+        return true;
     }
 
     public boolean launchGateOpen() {
-        if (launchToggleTimer.milliseconds() < 1000) {
-            sweepLeft.setPosition(0.7);
-            sweepRight.setPosition(0.7);
-            return true;
-        }
-        return false;
+        sweepLeft.setPosition(0.7);
+        sweepRight.setPosition(0.7);
+        return true;
     }
 
     public void updateTargetDistance(RobotVision robotVision) {
         double targetDistance = robotVision.getDistance();
         if (targetDistance > 0.0) {
             currentTargetDistance = ((targetDistance * 8.582)) + 1494;
-            //9.4)) + 1425;
+        }
+    }
+
+    public void updateTargetDistance(double targetDistance) {
+        if (targetDistance > 0.0) {
+            currentTargetDistance = ((targetDistance * 8.582)) + 1494;
         }
     }
 
