@@ -1,24 +1,22 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="BlueGoal", group="SCC")
-public class BlueGoal extends LinearOpMode {
+@Autonomous(name="RedGoalNOPark", group="SCC")
+public class RedGoalNOPark extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Define the field positions
-        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
+        Pose2d startPos = new Pose2d(-58, 43, Math.toRadians(-54));
+        Pose2d launchPosOne = new Pose2d(-35, 19.1, Math.toRadians(-54));
+        Pose2d parkPos = new Pose2d(-25, 50, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
@@ -89,7 +87,7 @@ public class BlueGoal extends LinearOpMode {
         robotConveyor.launchMotorOff();
 
         // Drive from the launch position to park position
-        Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
+        //Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
 
         sleep(1000);
     }

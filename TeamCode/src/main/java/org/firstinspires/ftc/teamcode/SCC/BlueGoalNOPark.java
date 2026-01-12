@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="BlueGoal", group="SCC")
-public class BlueGoal extends LinearOpMode {
+@Autonomous(name="BlueGoalNOPark", group="SCC")
+public class BlueGoalNOPark extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Define the field positions
@@ -89,7 +87,7 @@ public class BlueGoal extends LinearOpMode {
         robotConveyor.launchMotorOff();
 
         // Drive from the launch position to park position
-        Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
+        //Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
 
         sleep(1000);
     }

@@ -12,22 +12,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous(name="RedGoal", group="SCC")
-@Disabled
 public class RedGoal extends LinearOpMode {
-    private FtcDashboard dashboard = FtcDashboard.getInstance();
-    private RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
-
     @Override
     public void runOpMode() throws InterruptedException {
-        RobotVision robotVision = new RobotVision();
-        RobotLift robotLift = new RobotLift(hardwareMap);
-
         // Define the field positions
         Pose2d startPos = new Pose2d(-58, 43, Math.toRadians(-54));
         Pose2d launchPosOne = new Pose2d(-35, 19.1, Math.toRadians(-54));
         Pose2d parkPos = new Pose2d(-25, 50, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
+
+        RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
+        //RobotVision robotVision = new RobotVision();
+        //RobotLift robotLift = new RobotLift(hardwareMap);
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
@@ -48,47 +45,63 @@ public class RedGoal extends LinearOpMode {
 
         // First thing first!! Zero the robot
         robotConveyor.zero();
-        robotLift.zero();
-        robotVision.zero(hardwareMap);
+        //robotLift.zero();
+        //robotVision.zero(hardwareMap);
 
         if (isStopRequested()) return;
         sleep(200);
         if (isStopRequested()) return;
+
+        // Update the target position
+        robotConveyor.updateTargetDistance(45);
+        updateTelemetry(telemetry);
+        if (isStopRequested()) return;
+        sleep(200);
+
+        //.Launch 3 balls - first turn on the launch motor
+        robotConveyor.launchMotorOn();
 
         // Drive from the start position to the launch position
         Actions.runBlocking(new SequentialAction(driveFromStartToLaunchPosOne));
 
         if (isStopRequested()) return;
 
-        // Update the target position
-        robotConveyor.updateTargetDistance(robotVision);
-        if (isStopRequested()) return;
-        sleep(200);
-
-        //.Launch 3 balls - first turn on the launch motor
-        robotConveyor.launchMotorOn();
         int successfulBallLaunchCount = 0;
         while (successfulBallLaunchCount < 3) {
             if (isStopRequested()) return;
-            if (launchBall())
+            robotConveyor.turnOutTakeOff();
+            robotConveyor.turnInTakeOff();
+            sleep(1000);
+            if (launchBall(robotConveyor)) {
                 successfulBallLaunchCount++;
+
+                /*while (robotConveyor.getLaunchSensorDistance() > 4.0
+                        && (successfulBallLaunchCount < 3)) {
+                    robotConveyor.ballPickup();
+                }sleep(1000);*/
+                if (successfulBallLaunchCount < 3) {
+                    robotConveyor.ballPickup();
+                    sleep(2000);
+                    robotConveyor.ballPickup();
+                }
+            }
         }
         robotConveyor.launchMotorOff();
 
         // Drive from the launch position to park position
         Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
 
-        sleep(5000);
+        sleep(1000);
     }
 
-    public boolean launchBall() {
+    public boolean launchBall(RobotConveyor conveyor) {
         // Expects the launch motor to be controlled externally
-        robotConveyor.launchBall();
+        conveyor.launchBall();
         if (isStopRequested()) return false;
-        sleep(1000);
-        robotConveyor.launchGateOpen();
+        sleep(2000);
+        conveyor.launchGateOpen();
         if (isStopRequested()) return false;
-        sleep(1000);
-        return robotConveyor.getLaunchSensorDistance() < 4.0;
+        sleep(500);
+        return true;
     }
 }

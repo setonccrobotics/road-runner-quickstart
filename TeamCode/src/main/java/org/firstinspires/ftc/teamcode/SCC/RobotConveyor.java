@@ -39,6 +39,8 @@ public class RobotConveyor {
 
     private boolean launchInProcess = false;
 
+    private ElapsedTime distanceSensorReadEnabledTimer = new ElapsedTime();
+
     private double currentTargetDistance = 48.0;
 
     public RobotConveyor(HardwareMap hardwareMap) {
@@ -77,6 +79,7 @@ public class RobotConveyor {
         launcherMotor.setDirection(DcMotor.Direction.FORWARD);
 
         launchToggleTimer.reset();
+        distanceSensorReadEnabledTimer.reset();
     }
 
     public void zero() {
@@ -102,7 +105,8 @@ public class RobotConveyor {
             outTakeRight.setPower(0.0);
         }
 
-        if (gamepad.a) {
+        if (gamepad.a && distanceSensorReadEnabledTimer.milliseconds() > 250) {
+            distanceSensorReadEnabledTimer.reset();
             ballPickup();
         }
 
