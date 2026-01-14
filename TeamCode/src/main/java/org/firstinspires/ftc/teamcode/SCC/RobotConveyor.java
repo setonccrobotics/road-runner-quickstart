@@ -158,6 +158,77 @@ public class RobotConveyor {
         }
     }
 
+    public void runToo(Gamepad gamepad, RobotVision robotVision) {
+        // Are we going up and has the upper limit not been reached?
+        if (gamepad.y){
+            inTakeLeft.setPower(1.0);
+            inTakeRight.setPower(1.0);
+        } else if (!(gamepad.left_trigger > 0.2)) {
+            inTakeLeft.setPower(0.0);
+            inTakeRight.setPower(0.0);
+        }
+
+        if (gamepad.x){
+            outTakeLeft.setPower(1.0);
+            outTakeRight.setPower(1.0);
+        } else if (!(gamepad.left_trigger > 0.2)) {
+            outTakeLeft.setPower(0.0);
+            outTakeRight.setPower(0.0);
+        }
+
+        if (gamepad.left_trigger > 0.2 && distanceSensorReadEnabledTimer.milliseconds() > 250) {
+            distanceSensorReadEnabledTimer.reset();
+            ballPickup();
+        }
+
+        if (gamepad.right_trigger > 0.2 && launchButtonToggleTimer.milliseconds() > 500) {
+            launchButtonToggle = !launchButtonToggle;
+            launchButtonToggleTimer.reset();
+        }
+
+        if (launchButtonToggle){
+            sweepLeft.setPosition(0.3);
+            sweepRight.setPosition(0.3);
+        } else {
+            sweepLeft.setPosition(0.7);
+            sweepRight.setPosition(0.7);
+        }
+
+        /*
+        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
+            launchButtonToggle = !launchButtonToggle;
+            launchButtonToggleTimer.reset();
+        } else if (launchInProcess && launchButtonToggleTimer.milliseconds() > 500) {
+            launchInProcess = false;
+            launchButtonToggle = !launchButtonToggle;
+            launchButtonToggleTimer.reset();
+        }
+
+        if (launchButtonToggle){
+            launchInProcess = true;
+            sweepLeft.setPosition(0.3);
+            sweepRight.setPosition(0.3);
+        } else {
+            sweepLeft.setPosition(0.7);
+            sweepRight.setPosition(0.7);
+        }
+*/
+        if (gamepad.b && launchToggleTimer.milliseconds() > 1000) {
+            launchToggle = !launchToggle;
+            launchToggleTimer.reset();
+        }
+
+        if (launchToggle) {
+            double targetDistance = robotVision.getDistance();
+            if (targetDistance > 0.0) {
+                launchVelocity = ((targetDistance * 9.4)) + 1425;
+            }
+            launcherMotor.setVelocity(launchVelocity);
+        } else {
+            launcherMotor.setVelocity(0.0);
+        }
+    }
+
     public void turnInTakeOn() {
         inTakeLeft.setPower(1.0);
         inTakeRight.setPower(1.0);
