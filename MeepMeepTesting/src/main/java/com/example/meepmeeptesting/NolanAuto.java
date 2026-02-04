@@ -9,40 +9,34 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class MeepMeepBlueLong {
+public class NolanAuto {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        // Create a drive object for meep meep
+        // Create a drive object for Meep Meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 14)
                 .setDimensions(17,18)
-                .setStartPose(new Pose2d(61, -8, Math.toRadians(0)))
                 .build();
         DriveShim drive = myBot.getDrive();
 
-        // Define the field positions
-        Pose2d startPos = new Pose2d(61, -8, Math.toRadians(0));
-        Pose2d launchPosOne = new Pose2d(53, -12, Math.toRadians(25));
-        Pose2d parkPos = new Pose2d(44, -14, Math.toRadians(40));
+        // Nolan's code goes here
+        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
+                .lineToX(53)
+                .lineToX(0)
+                .build()));
 
-        // Define the robot actions
-        Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .splineToLinearHeading(launchPosOne, launchPosOne.heading)
-                .build();
 
-        Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
-                .splineToLinearHeading(parkPos, parkPos.heading)
-                .build();
+        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-56, -44, Math.toRadians(235.00)))
+                .lineToXConstantHeading(-34)
+                .splineToSplineHeading(new Pose2d(-12, -30, Math.toRadians(270.00)), Math.toRadians(-37.37))
+                .strafeToSplineHeading(new Vector2d(-12, -36), Math.toRadians(270.00))
+                .strafeToSplineHeading(new Vector2d(-12, -42), Math.toRadians(270.00))
+                .strafeToSplineHeading(new Vector2d(-12, -48), Math.toRadians(270.00))
+                .splineToSplineHeading(new Pose2d(-36, -20, Math.toRadians(235.00)), Math.toRadians(114.00))
+                .build()));
 
-        // Define the order of actions
-        Action runAuto = new SequentialAction(
-                driveFromStartToLaunchPosOne,
-                driveFromLaunchPosOneToPark);
-
-        // Run the auto program
-        myBot.runAction(runAuto);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)
                 .setDarkMode(true)

@@ -17,25 +17,16 @@ public class PeacemakerOneController extends LinearOpMode {
         RobotVision robotVision = new RobotVision();
         //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
         RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
-        RobotLift robotLift = new RobotLift(hardwareMap);
-        double driveFactor = 0.5;
+        RobotLiftServo robotLift = new RobotLiftServo(hardwareMap);
 
         waitForStart();
 
         // Zero the robot
         robotConveyor.zero();
-        //robotLift.zero();
+        robotLift.zero();
         robotVision.zero(hardwareMap);
 
         while (opModeIsActive()) {
-            if (gamepad1.right_bumper) {
-                driveFactor = 0.25;
-            } else {
-                driveFactor = 1.0;
-            }
-            //if (gamepad1.right_trigger > 0.2) {
-            //    driveFactor *= -1.0;
-            //}
             if (gamepad1.a) {
                 // Enter auto aiming mode
                 double leftOffset = robotVision.getLeftOffset();
@@ -43,17 +34,6 @@ public class PeacemakerOneController extends LinearOpMode {
                 int id = robotVision.getTagId();
                 double upperOffset = 1.0;
                 double lowerOffset = -1.0;
-            /*if (distance > 100) {
-                if (id == 20) {
-                    // Blue
-                    upperOffset = -4.0;
-                    lowerOffset = -6.0;
-                } else {
-                    // Red
-                    upperOffset = 6.0;
-                    lowerOffset = 4.0;
-                }
-            }*/
 
                 // Should we turn to the left
                 if (leftOffset > upperOffset) {
@@ -88,10 +68,10 @@ public class PeacemakerOneController extends LinearOpMode {
                 // Drive the robot with roadrunner via gamepad 1 input
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
-                                -gamepad1.left_stick_y * driveFactor,
-                                -gamepad1.left_stick_x * driveFactor
+                                -gamepad1.left_stick_y,
+                                -gamepad1.left_stick_x
                         ),
-                        -gamepad1.right_stick_x * driveFactor
+                        -gamepad1.right_stick_x
                 ));
             }
             drive.updatePoseEstimate();
@@ -112,4 +92,3 @@ public class PeacemakerOneController extends LinearOpMode {
         }
     }
 }
-

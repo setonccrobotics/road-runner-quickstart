@@ -58,6 +58,7 @@ public class RobotVision {
     public void zero(HardwareMap hardwareMap) {
         // Create the AprilTag processor the easy way.
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+        //aprilTag.setDecimation(1);
 
         // Create the vision portal the easy way.
         if (USE_WEBCAM) {

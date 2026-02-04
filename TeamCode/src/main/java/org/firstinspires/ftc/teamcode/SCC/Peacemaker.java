@@ -17,14 +17,14 @@ public class Peacemaker extends LinearOpMode {
         RobotVision robotVision = new RobotVision();
         //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
         RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
-        RobotLift robotLift = new RobotLift(hardwareMap);
+        RobotLiftServo robotLift = new RobotLiftServo(hardwareMap);
         double driveFactor = 0.5;
 
         waitForStart();
 
         // Zero the robot
         robotConveyor.zero();
-        //robotLift.zero();
+        robotLift.zero();
         robotVision.zero(hardwareMap);
 
         while (opModeIsActive()) {

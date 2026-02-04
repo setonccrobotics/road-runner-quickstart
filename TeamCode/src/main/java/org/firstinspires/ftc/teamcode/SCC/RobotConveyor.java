@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -43,6 +47,10 @@ public class RobotConveyor {
 
     private double currentTargetDistance = 48.0;
 
+    private Servo orvisServo; // Thumbs up servo
+    private double ORVIS_SERVO_HOME = 0.45;
+    private double ORVIS_SERVO_UP = 0.85;
+
     public RobotConveyor(HardwareMap hardwareMap) {
         // Configure the hardware map
         inTakeLeft = hardwareMap.get(CRServo.class,
@@ -69,6 +77,9 @@ public class RobotConveyor {
         launchDistanceSensor = hardwareMap.get(DistanceSensor.class,
                 "launchDistanceSensor");
 
+        orvisServo = hardwareMap.get(Servo.class,
+                "orvisServo");
+
         // Configure the motor
         outTakeLeft.setDirection(CRServo.Direction.REVERSE);
         outTakeRight.setDirection(CRServo.Direction.FORWARD);
@@ -85,29 +96,34 @@ public class RobotConveyor {
     public void zero() {
         sweepLeft.setPosition(0.7);
         sweepRight.setPosition(0.7);
+        setOrvisDown();
     }
 
     public void run(Gamepad gamepad, RobotVision robotVision) {
-        // Are we going up and has the upper limit not been reached?
-        if (gamepad.y){
-            inTakeLeft.setPower(1.0);
-            inTakeRight.setPower(1.0);
-        } else if (!gamepad.a) {
-            inTakeLeft.setPower(0.0);
-            inTakeRight.setPower(0.0);
-        }
+        if (gamepad.left_trigger > 0.2){
+            ballBackup();
+        } else {
+            // Are we going up and has the upper limit not been reached?
+            if (gamepad.y) {
+                inTakeLeft.setPower(1.0);
+                inTakeRight.setPower(1.0);
+            } else if (!gamepad.a) {
+                inTakeLeft.setPower(0.0);
+                inTakeRight.setPower(0.0);
+            }
 
-        if (gamepad.b){
-            outTakeLeft.setPower(1.0);
-            outTakeRight.setPower(1.0);
-        } else if (!gamepad.a) {
-            outTakeLeft.setPower(0.0);
-            outTakeRight.setPower(0.0);
-        }
+            if (gamepad.b) {
+                outTakeLeft.setPower(1.0);
+                outTakeRight.setPower(1.0);
+            } else if (!gamepad.a) {
+                outTakeLeft.setPower(0.0);
+                outTakeRight.setPower(0.0);
+            }
 
-        if (gamepad.a && distanceSensorReadEnabledTimer.milliseconds() > 250) {
-            distanceSensorReadEnabledTimer.reset();
-            ballPickup();
+            if (gamepad.a && distanceSensorReadEnabledTimer.milliseconds() > 500) {
+                distanceSensorReadEnabledTimer.reset();
+                ballPickup();
+            }
         }
 
         if (gamepad.right_bumper && launchButtonToggleTimer.milliseconds() > 500) {
@@ -123,25 +139,6 @@ public class RobotConveyor {
             sweepRight.setPosition(0.7);
         }
 
-        /*
-        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
-            launchButtonToggle = !launchButtonToggle;
-            launchButtonToggleTimer.reset();
-        } else if (launchInProcess && launchButtonToggleTimer.milliseconds() > 500) {
-            launchInProcess = false;
-            launchButtonToggle = !launchButtonToggle;
-            launchButtonToggleTimer.reset();
-        }
-
-        if (launchButtonToggle){
-            launchInProcess = true;
-            sweepLeft.setPosition(0.3);
-            sweepRight.setPosition(0.3);
-        } else {
-            sweepLeft.setPosition(0.7);
-            sweepRight.setPosition(0.7);
-        }
-*/
         if (gamepad.x && launchToggleTimer.milliseconds() > 1000) {
             launchToggle = !launchToggle;
             launchToggleTimer.reset();
@@ -153,8 +150,10 @@ public class RobotConveyor {
                 launchVelocity = ((targetDistance * 9.4)) + 1425;
             }
             launcherMotor.setVelocity(launchVelocity);
+            setOrvisUp();
         } else {
             launcherMotor.setVelocity(0.0);
+            setOrvisDown();
         }
     }
 
@@ -176,7 +175,7 @@ public class RobotConveyor {
             outTakeRight.setPower(0.0);
         }
 
-        if (gamepad.left_trigger > 0.2 && distanceSensorReadEnabledTimer.milliseconds() > 250) {
+        if (gamepad.left_trigger > 0.2 && distanceSensorReadEnabledTimer.milliseconds() > 500) {
             distanceSensorReadEnabledTimer.reset();
             ballPickup();
         }
@@ -194,25 +193,6 @@ public class RobotConveyor {
             sweepRight.setPosition(0.7);
         }
 
-        /*
-        if (gamepad.y && launchButtonToggleTimer.milliseconds() > 500) {
-            launchButtonToggle = !launchButtonToggle;
-            launchButtonToggleTimer.reset();
-        } else if (launchInProcess && launchButtonToggleTimer.milliseconds() > 500) {
-            launchInProcess = false;
-            launchButtonToggle = !launchButtonToggle;
-            launchButtonToggleTimer.reset();
-        }
-
-        if (launchButtonToggle){
-            launchInProcess = true;
-            sweepLeft.setPosition(0.3);
-            sweepRight.setPosition(0.3);
-        } else {
-            sweepLeft.setPosition(0.7);
-            sweepRight.setPosition(0.7);
-        }
-*/
         if (gamepad.b && launchToggleTimer.milliseconds() > 1000) {
             launchToggle = !launchToggle;
             launchToggleTimer.reset();
@@ -224,8 +204,10 @@ public class RobotConveyor {
                 launchVelocity = ((targetDistance * 9.4)) + 1425;
             }
             launcherMotor.setVelocity(launchVelocity);
+            setOrvisUp();
         } else {
             launcherMotor.setVelocity(0.0);
+            setOrvisDown();
         }
     }
 
@@ -247,6 +229,16 @@ public class RobotConveyor {
         outTakeRight.setPower(0.0);
     }
 
+    public void reverseOutTake() {
+        outTakeLeft.setPower(-1.0);
+        outTakeRight.setPower(-1.0);
+    }
+
+    public void reverseInTake() {
+        inTakeLeft.setPower(-1.0);
+        inTakeRight.setPower(-1.0);
+    }
+
     public void ballPickup() {
         if (launchDistanceSensor.getDistance(DistanceUnit.INCH) > 8.0) {
             turnOutTakeOn();
@@ -262,6 +254,11 @@ public class RobotConveyor {
             turnOutTakeOff();
             turnInTakeOff();
         }
+    }
+
+    public void ballBackup() {
+        reverseOutTake();
+        reverseInTake();
     }
 
     public boolean launchBall() {
@@ -312,6 +309,14 @@ public class RobotConveyor {
     public double getLaunchSensorDistance() {
         return launchDistanceSensor.getDistance(DistanceUnit.INCH);
     }
+
+    public void setOrvisUp() {
+        orvisServo.setPosition(ORVIS_SERVO_UP);
+    }
+    public void setOrvisDown() {
+        orvisServo.setPosition(ORVIS_SERVO_HOME);
+    }
+
 
     public void addTelemetry(Telemetry telemetry) {
         /*telemetry.addData("launchVelocity", "%.2f", launchVelocity);
