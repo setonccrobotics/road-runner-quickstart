@@ -22,7 +22,10 @@ public class BlueGoal extends LinearOpMode {
         // Define the field positions
         Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
         Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
-        Pose2d tapeMarkOnePos = new Pose2d(-16, -33, Math.toRadians(-90));
+        Pose2d tapeMarkOnePos = new Pose2d(-16, -28, Math.toRadians(-90));
+        Pose2d tapeMark1APos = new Pose2d(-16, -33, Math.toRadians(-90));
+        Pose2d tapeMark1BPos = new Pose2d(-16, -38, Math.toRadians(-90));
+        Pose2d tapeMark1CPos = new Pose2d(-16, -43, Math.toRadians(-90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
@@ -31,8 +34,24 @@ public class BlueGoal extends LinearOpMode {
                 .strafeTo(launchPosOne.position)
                 .build();
 
-        Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
+        Action driveFromLaunchPosOneToTapeMarkOne = drive.actionBuilder(launchPosOne)
                 .splineTo(tapeMarkOnePos.position, tapeMarkOnePos.heading)
+                .build();
+
+        Action driveFromTapeMarkOneTo1A = drive.actionBuilder(tapeMarkOnePos)
+                .splineTo(tapeMark1APos.position, tapeMark1APos.heading)
+                .build();
+
+        Action driveFromTapeMark1ATo1B = drive.actionBuilder(tapeMark1APos)
+                .splineTo(tapeMark1BPos.position, tapeMark1BPos.heading)
+                .build();
+
+        Action driveFromTapeMark1BTo1C = drive.actionBuilder(tapeMark1BPos)
+                .splineTo(tapeMark1CPos.position, tapeMark1CPos.heading)
+                .build();
+
+        Action driveFromTapeMark1CToLaunchPosOne = drive.actionBuilder(tapeMark1CPos)
+                .splineTo(launchPosOne.position, launchPosOne.heading)
                 .build();
 
         // Wait for the DS start button to be touched.
@@ -48,18 +67,16 @@ public class BlueGoal extends LinearOpMode {
         // Drive from the start position to the launch position
         Actions.runBlocking(new SequentialAction(driveFromStartToLaunchPosOne,
                 robotControl.launchBalls(),
-                driveFromLaunchPosOneToPark));
-
-    }
-
-    public boolean launchBall(RobotConveyor conveyor) {
-        // Expects the launch motor to be controlled externally
-        conveyor.launchBall();
-        if (isStopRequested()) return false;
-        sleep(2000);
-        conveyor.launchGateOpen();
-        if (isStopRequested()) return false;
-        sleep(500);
-        return true;
+                driveFromLaunchPosOneToTapeMarkOne,
+                robotControl.conveyorOn(),
+                driveFromTapeMarkOneTo1A,
+                robotControl.conveyorOn(),
+                driveFromTapeMark1ATo1B,
+                robotControl.conveyorOn(),
+                driveFromTapeMark1BTo1C,
+                robotControl.conveyorOff(),
+                driveFromTapeMark1CToLaunchPosOne,
+                robotControl.launchBalls()
+        ));
     }
 }
