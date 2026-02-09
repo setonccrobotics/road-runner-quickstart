@@ -22,13 +22,13 @@ public class NolanAuto {
         DriveShim drive = myBot.getDrive();
 
         // Nolan's code goes here
-        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
-                .lineToX(53)
-                .lineToX(0)
-                .build()));
+        //myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
+        //        .lineToX(53)
+        //        .lineToX(0)
+        //        .build()));
 
 
-        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-56, -44, Math.toRadians(235.00)))
+        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-56, -44, Math.toRadians(55.00)))
                 .lineToXConstantHeading(-34)
                 .splineToSplineHeading(new Pose2d(-12, -30, Math.toRadians(270.00)), Math.toRadians(-37.37))
                 .strafeToSplineHeading(new Vector2d(-12, -36), Math.toRadians(270.00))

@@ -19,8 +19,20 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 public class BlueGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-56, -44, Math.toRadians(55.00)));
+
+        Actions.runBlocking(new SequentialAction(drive.actionBuilder(new Pose2d(-56, -44, Math.toRadians(55.00)))
+                .lineToXConstantHeading(-34)
+                .splineToSplineHeading(new Pose2d(-12, -30, Math.toRadians(270.00)), Math.toRadians(-37.37))
+                .strafeToSplineHeading(new Vector2d(-12, -36), Math.toRadians(270.00))
+                .strafeToSplineHeading(new Vector2d(-12, -42), Math.toRadians(270.00))
+                .strafeToSplineHeading(new Vector2d(-12, -48), Math.toRadians(270.00))
+                .splineToSplineHeading(new Pose2d(-36, -20, Math.toRadians(55.00)), Math.toRadians(114.00))
+                .build()));
+    }
         // Define the field positions
-        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
+        /*Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
         Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
         Pose2d tapeMarkOnePos = new Pose2d(-16, -33, Math.toRadians(-90));
 
@@ -50,7 +62,7 @@ public class BlueGoal extends LinearOpMode {
                 robotControl.launchBalls(),
                 driveFromLaunchPosOneToPark));
 
-    }
+    }*/
 
     public boolean launchBall(RobotConveyor conveyor) {
         // Expects the launch motor to be controlled externally
