@@ -14,8 +14,11 @@ public class MeepMeepBlueGoal {
 
         // Define the field positions
         Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
-        Pose2d launchPosOne = new Pose2d(-35, -19.1, Math.toRadians(54));
-        Pose2d parkPos = new Pose2d(-25, -50, Math.toRadians(-90));
+        Pose2d launchPosOne = new Pose2d(-35, -16.1, Math.toRadians(54));
+        Pose2d tapeMarkOnePos = new Pose2d(-12, -28, Math.toRadians(-90));
+        Pose2d tapeMark1APos = new Pose2d(-12, -33, Math.toRadians(-90));
+        Pose2d tapeMark1BPos = new Pose2d(-12, -38, Math.toRadians(-90));
+        Pose2d tapeMark1CPos = new Pose2d(-12, -43, Math.toRadians(-90));
 
         // Create a drive object for meep meep
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -30,15 +33,35 @@ public class MeepMeepBlueGoal {
                 .strafeTo(launchPosOne.position)
                 .build();
 
-        Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
-                .splineTo(parkPos.position, parkPos.heading)
+        Action driveFromLaunchPosOneToTapeMarkOne = drive.actionBuilder(launchPosOne)
+                .splineTo(tapeMarkOnePos.position, tapeMarkOnePos.heading)
+                .build();
+
+        Action driveFromTapeMarkOneTo1A = drive.actionBuilder(tapeMarkOnePos)
+                .splineTo(tapeMark1APos.position, tapeMark1APos.heading)
+                .build();
+
+        Action driveFromTapeMark1ATo1B = drive.actionBuilder(tapeMark1APos)
+                .splineTo(tapeMark1BPos.position, tapeMark1BPos.heading)
+                .build();
+
+        Action driveFromTapeMark1BTo1C = drive.actionBuilder(tapeMark1BPos)
+                .splineTo(tapeMark1CPos.position, tapeMark1CPos.heading)
+                .build();
+
+        Action driveFromTapeMark1CToLaunchPosOne = drive.actionBuilder(tapeMark1CPos)
+                .splineTo(launchPosOne.position, launchPosOne.heading)
                 .build();
 
 
         // Define the order of actions
         Action runAuto = new SequentialAction(
                 driveFromStartToLaunchPosOne,
-                driveFromLaunchPosOneToPark);
+                driveFromLaunchPosOneToTapeMarkOne,
+                driveFromTapeMarkOneTo1A,
+                driveFromTapeMark1ATo1B,
+                driveFromTapeMark1BTo1C,
+                driveFromTapeMark1CToLaunchPosOne);
 
         // Run the auto program
         myBot.runAction(runAuto);

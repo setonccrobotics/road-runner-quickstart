@@ -18,7 +18,7 @@ public class RobotControl {
     public class LaunchMotorOn implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            robotConveyor.updateTargetDistance(2400);
+            robotConveyor.updateTargetDistance(45);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -46,7 +46,9 @@ public class RobotControl {
     public class ConveyorOn implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            robotConveyor.ballPickup();
+            //robotConveyor.ballPickup();
+            robotConveyor.turnInTakeOn();
+            robotConveyor.turnOutTakeOn();
             /*robotConveyor.launchMotorOn();
             try {
                 Thread.sleep(1000);
@@ -76,13 +78,13 @@ public class RobotControl {
     public class LaunchBalls implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            robotConveyor.updateTargetDistance(45);
+            /*robotConveyor.updateTargetDistance(45);
             robotConveyor.launchMotorOn();
             try {
                 Thread.sleep(2500);
             } catch (InterruptedException e) {
                 return false;
-            }
+            }*/
 
             int ballCount = 0;
             while (ballCount < 3) {
@@ -94,18 +96,28 @@ public class RobotControl {
                     return false;
                 }
                 // Make sure a ball is in place to launch
-                while (robotConveyor.getLaunchSensorDistance() > 8.0) {
+                robotConveyor.ballPickup();
+                try {
+                    if (ballCount == 0) {
+                        Thread.sleep(200);
+                    } else {
+                        Thread.sleep(1000);
+                    }
+                } catch (InterruptedException e) {
+                    return false;
+                }
+                /*while (robotConveyor.getLaunchSensorDistance() > 8.0) {
                     robotConveyor.ballPickup();
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         return false;
                     }
-                }
+                }*/
                 // Launch the ball
                 robotConveyor.ballBackup();
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     return false;
                 }
@@ -113,18 +125,50 @@ public class RobotControl {
                 robotConveyor.turnInTakeOff();
                 robotConveyor.launchBall();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     return false;
                 }
                 // End launch ball one
                 ballCount++;
             }
-            robotConveyor.launchMotorOff();
+            //robotConveyor.launchMotorOff();
+            robotConveyor.launchGateOpen();
             return false;
         }
     }
     public Action launchBalls() {
         return new LaunchBalls();
+    }
+
+    public class SleepHalfSecond implements Action {
+        @Override
+        public boolean run (@NonNull TelemetryPacket packet) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            return false;
+        }
+    }
+    public Action sleepHalfSecond() {
+        return new SleepHalfSecond();
+    }
+
+    public class LaunchGateOpen implements Action {
+        @Override
+        public boolean run (@NonNull TelemetryPacket packet) {
+            robotConveyor.launchGateOpen();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            return false;
+        }
+    }
+    public Action launchGateOpen() {
+        return new LaunchGateOpen();
     }
 }

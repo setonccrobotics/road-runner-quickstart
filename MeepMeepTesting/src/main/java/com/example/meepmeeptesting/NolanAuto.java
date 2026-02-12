@@ -28,13 +28,18 @@ public class NolanAuto {
         //        .build()));
 
 
-        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-56, -44, Math.toRadians(55.00)))
-                .lineToXConstantHeading(-34)
-                .splineToSplineHeading(new Pose2d(-12, -30, Math.toRadians(270.00)), Math.toRadians(-37.37))
-                .strafeToSplineHeading(new Vector2d(-12, -36), Math.toRadians(270.00))
-                .strafeToSplineHeading(new Vector2d(-12, -42), Math.toRadians(270.00))
-                .strafeToSplineHeading(new Vector2d(-12, -48), Math.toRadians(270.00))
-                .splineToSplineHeading(new Pose2d(-36, -20, Math.toRadians(235.00)), Math.toRadians(114.00))
+        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-62.0, -22.0, Math.toRadians(0.00)))
+                //.splineToSplineHeading(new Pose2d(-22.0, -22.0, Math.toRadians(44.0)), Math.toRadians(0.0))
+                .lineToXLinearHeading(-22, 44)
+                //.strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0))
+                .strafeToSplineHeading(new Vector2d(-12.0, -30.0), Math.toRadians(270.0))
+                .strafeToConstantHeading(new Vector2d(-12.0, -54.0))
+                .strafeToConstantHeading(new Vector2d(-12.0, -50.0))
+                .splineToSplineHeading(new Pose2d(-4.0, -55.0, Math.toRadians(180.0)), Math.toRadians(270.0))
+                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0))
+                .strafeToSplineHeading(new Vector2d(12.0, -30.0), Math.toRadians(270.0))
+                .strafeToConstantHeading(new Vector2d(12.0, -50.0))
+                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0))
                 .build()));
 
 
