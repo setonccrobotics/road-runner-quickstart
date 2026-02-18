@@ -256,6 +256,11 @@ public class RobotConveyor {
         }
     }
 
+    public void ballAdvance() {
+        turnInTakeOn();
+        turnOutTakeOn();
+    }
+
     public void ballBackup() {
         reverseOutTake();
         reverseInTake();
