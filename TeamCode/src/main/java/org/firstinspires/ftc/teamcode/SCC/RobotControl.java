@@ -19,11 +19,11 @@ public class RobotControl {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
             robotConveyor.updateTargetDistance(45);
-            try {
+            /*try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
             robotConveyor.launchMotorOn();
             return false;
         }
@@ -78,61 +78,39 @@ public class RobotControl {
     public class LaunchBalls implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            /*robotConveyor.updateTargetDistance(45);
-            robotConveyor.launchMotorOn();
-            try {
-                Thread.sleep(2500);
-            } catch (InterruptedException e) {
-                return false;
-            }*/
-
             int ballCount = 0;
             while (ballCount < 3) {
-                // Launch ball one
-                robotConveyor.launchGateOpen();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    return false;
-                }
-                // Make sure a ball is in place to launch
-                robotConveyor.ballPickup();
-                try {
-                    if (ballCount == 0) {
-                        Thread.sleep(200);
-                    } else {
-                        Thread.sleep(1000);
-                    }
-                } catch (InterruptedException e) {
-                    return false;
-                }
-                /*while (robotConveyor.getLaunchSensorDistance() > 8.0) {
-                    robotConveyor.ballPickup();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        return false;
-                    }
-                }*/
+                robotConveyor.turnOutTakeOff();
+                robotConveyor.turnInTakeOff();
                 // Launch the ball
                 robotConveyor.ballBackup();
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     return false;
                 }
-                robotConveyor.turnOutTakeOff();
-                robotConveyor.turnInTakeOff();
+                // Launch ball one
                 robotConveyor.launchBall();
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     return false;
                 }
+                robotConveyor.launchGateOpen();
+                // Make sure a ball is in place to launch
+                robotConveyor.turnOutTakeOn();
+                robotConveyor.turnInTakeOn();
+                try {
+                    Thread.sleep(800);
+                } catch (InterruptedException e) {
+                    return false;
+                }
+                robotConveyor.turnOutTakeOff();
+                robotConveyor.turnInTakeOff();
+
                 // End launch ball one
                 ballCount++;
             }
-            //robotConveyor.launchMotorOff();
             robotConveyor.launchGateOpen();
             return false;
         }
