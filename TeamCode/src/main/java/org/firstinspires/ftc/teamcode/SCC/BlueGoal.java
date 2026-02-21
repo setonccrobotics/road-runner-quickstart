@@ -20,7 +20,8 @@ public class BlueGoal extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Define the field positions
 
-        Pose2d startPos = new Pose2d(-62, -33, Math.toRadians(90));
+        //Pose2d startPos = new Pose2d(-62, -33, Math.toRadians(90));
+        Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
         Pose2d launchPos = new Pose2d(-22, -22, Math.toRadians(44));
         Pose2d parkPos = new Pose2d(-12.0, -30.0, Math.toRadians(40.0));
         Pose2d tapeMarkOneStartPos = new Pose2d(-12, -30, Math.toRadians(270));

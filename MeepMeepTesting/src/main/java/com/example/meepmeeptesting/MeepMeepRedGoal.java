@@ -22,7 +22,8 @@ public class MeepMeepRedGoal {
         DriveShim drive = myBot.getDrive();
 
         // Define the robot actions
-        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-62, 33, Math.toRadians(270)))
+        //Pose2d startPos = new Pose2d(-58, -43, Math.toRadians(54));
+        myBot.runAction(new SequentialAction(drive.actionBuilder(new Pose2d(-58, 43, Math.toRadians(306)))
                 //Go from start position to Launch position
                 .strafeToSplineHeading(new Vector2d(-24.0, 20.0), Math.toRadians(308.0))
                 //Go to before the balls

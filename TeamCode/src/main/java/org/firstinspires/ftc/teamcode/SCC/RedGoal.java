@@ -19,7 +19,8 @@ public class RedGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Define the the predicted field positions (NEVER change these numbers, only the next block of code
-        Pose2d startPos = new Pose2d(-62, 33, Math.toRadians(270));//90 270
+        Pose2d startPos = new Pose2d(-55, 43, Math.toRadians(306));
+        //Pose2d startPos = new Pose2d(-62, 33, Math.toRadians(270));//90 270
         Pose2d launchPosOne = new Pose2d(-22, 22, Math.toRadians(310));//44 316
         Pose2d firstTapeMark = new Pose2d(-12, 26, Math.toRadians(84));//270 90
         Pose2d firstTapeMarkEnd = new Pose2d(-11, 53, Math.toRadians(84));//270 90
