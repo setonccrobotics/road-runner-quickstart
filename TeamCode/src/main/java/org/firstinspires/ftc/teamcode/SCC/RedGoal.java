@@ -1,107 +1,119 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous(name="RedGoal", group="SCC")
 public class RedGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        // Define the field positions
-        Pose2d startPos = new Pose2d(-58, 43, Math.toRadians(-54));
-        Pose2d launchPosOne = new Pose2d(-35, 19.1, Math.toRadians(-54));
-        Pose2d parkPos = new Pose2d(-25, 50, Math.toRadians(90));
+        // Define the the predicted field positions (NEVER change these numbers, only the next block of code
+        Pose2d startPos = new Pose2d(-62, 33, Math.toRadians(270));//90 270
+        Pose2d launchPosOne = new Pose2d(-22, 22, Math.toRadians(310));//44 316
+        Pose2d firstTapeMark = new Pose2d(-12, 26, Math.toRadians(84));//270 90
+        Pose2d firstTapeMarkEnd = new Pose2d(-11, 53, Math.toRadians(84));//270 90
+        Pose2d launchPosTwo = new Pose2d(-22, 22, Math.toRadians(310));//44 316
+        Pose2d secondTapeMark = new Pose2d(13, 24, Math.toRadians(90));//270 90
+        Pose2d secondTapeMarkEnd = new Pose2d(13, 51, Math.toRadians(90));//270 90
+        Pose2d launchThree = new Pose2d(-30, 20, Math.toRadians(310));//44 316
 
+        //define strafes to get to x Pos
+        Pose2d launchPos = new Pose2d(-24, 20, Math.toRadians(310));//44 316
+        Pose2d tapeMarkOneStartPos = new Pose2d(-12, 26, Math.toRadians(84));//272 92
+        Vector2d tapeMarkOneEndPos = new Vector2d(-11, 53);
+        Pose2d launchTwo = new Pose2d(-22, 16, Math.toRadians(310));//44 316
+        Pose2d tapeMarkTwoStartPos = new Pose2d(13, 24, Math.toRadians(80));//180 0
+        Vector2d tapeMarkTwoEndPos = new Vector2d(13, 51);
+        Pose2d launchPosThree = new Pose2d(-30, 20, Math.toRadians(310));//40 319
+        Pose2d parkPos = new Pose2d(-12, 30, Math.toRadians(314));//40 319
+
+        //sets the Hardware map
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
-        RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
-        //RobotVision robotVision = new RobotVision();
-        //RobotLift robotLift = new RobotLift(hardwareMap);
+        //sets constrants for velocity
+        TranslationalVelConstraint slowVel = new TranslationalVelConstraint(7.0);
+        ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-20.0, 20.0);
+        TranslationalVelConstraint fullVel = new TranslationalVelConstraint(100.0);
+        ProfileAccelConstraint fullAccel = new ProfileAccelConstraint(-80.0, 80.0);
 
         // Define the robot actions
-        Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .strafeTo(launchPosOne.position)
+        Action startToLaunchOne = drive.actionBuilder(startPos)
+                .strafeToSplineHeading(launchPos.position, launchPos.heading, fullVel, fullAccel)
                 .build();
 
-        Action driveFromLaunchPosOneToPark = drive.actionBuilder(launchPosOne)
-                .splineTo(parkPos.position, parkPos.heading)
+        Action launchOneToTapeMarkOne = drive.actionBuilder(launchPosOne)
+                .strafeToSplineHeading(tapeMarkOneStartPos.position, tapeMarkOneStartPos.heading, fullVel, fullAccel)
                 .build();
+
+        Action toTapeMarkOneEnd = drive.actionBuilder(firstTapeMark)
+                .strafeToConstantHeading(tapeMarkOneEndPos, slowVel, slowAccel)
+                .build();
+
+        Action tapeMarkOneEndToLaunchTwo = drive.actionBuilder(firstTapeMarkEnd)
+                //open gate
+                .strafeToConstantHeading(new Vector2d(-12.0, 46.0), fullVel)//this backs up from previous position
+                .splineToSplineHeading(new Pose2d(0.0, 52.0, Math.toRadians(180)), Math.toRadians(90), fullVel)//this strafes to open gate
+                //go to launch position
+                .strafeToSplineHeading(launchTwo.position, launchTwo.heading, fullVel, fullAccel)
+                .build();
+
+        Action launchTwoToTapeMarkTwo = drive.actionBuilder(launchPosTwo)
+                //Line two
+                .strafeToSplineHeading(tapeMarkTwoStartPos.position, tapeMarkTwoStartPos.heading, fullVel, fullAccel)
+                .build();
+
+
+        Action toTapeMarkTwoToEnd = drive.actionBuilder(secondTapeMark)
+                //go forward thrugh balls
+                .strafeToConstantHeading(tapeMarkTwoEndPos, slowVel, slowAccel)
+                .build();
+
+        Action tapeMarkTwoEndToLaunchThree = drive.actionBuilder(secondTapeMarkEnd)
+                //go to launch position
+                .strafeToSplineHeading(launchPosThree.position, launchPosThree.heading, fullVel, fullAccel)
+                .build();
+
+        Action park = drive.actionBuilder(launchThree)
+                //go to launch position
+                .strafeToSplineHeading(parkPos.position, parkPos.heading, fullVel, fullAccel)
+                .build();
+
+        RobotControl robotControl = new RobotControl(hardwareMap);
 
         // Wait for the DS start button to be touched.
-        telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to run OpMode");
-        telemetry.update();
         waitForStart();
 
-        if (isStopRequested()) return;
-
-        // First thing first!! Zero the robot
-        robotConveyor.zero();
-        //robotLift.zero();
-        //robotVision.zero(hardwareMap);
-
-        if (isStopRequested()) return;
-        sleep(200);
-        if (isStopRequested()) return;
-
-        // Update the target position
-        robotConveyor.updateTargetDistance(45);
-        updateTelemetry(telemetry);
-        if (isStopRequested()) return;
-        sleep(200);
-
-        //.Launch 3 balls - first turn on the launch motor
-        robotConveyor.launchMotorOn();
-
         // Drive from the start position to the launch position
-        Actions.runBlocking(new SequentialAction(driveFromStartToLaunchPosOne));
+        Actions.runBlocking(new SequentialAction(robotControl.launchMotorOn(),
+                startToLaunchOne,
+                robotControl.launchBalls(),
+                launchOneToTapeMarkOne,
+                robotControl.conveyorOn(),
+                toTapeMarkOneEnd,
+                robotControl.conveyorOff(),
+                tapeMarkOneEndToLaunchTwo,
+                robotControl.launchBalls(),
 
-        if (isStopRequested()) return;
-
-        int successfulBallLaunchCount = 0;
-        while (successfulBallLaunchCount < 3) {
-            if (isStopRequested()) return;
-            robotConveyor.turnOutTakeOff();
-            robotConveyor.turnInTakeOff();
-            sleep(1000);
-            if (launchBall(robotConveyor)) {
-                successfulBallLaunchCount++;
-
-                /*while (robotConveyor.getLaunchSensorDistance() > 4.0
-                        && (successfulBallLaunchCount < 3)) {
-                    robotConveyor.ballPickup();
-                }sleep(1000);*/
-                if (successfulBallLaunchCount < 3) {
-                    robotConveyor.ballPickup();
-                    sleep(2000);
-                    robotConveyor.ballPickup();
-                }
-            }
-        }
-        robotConveyor.launchMotorOff();
-
-        // Drive from the launch position to park position
-        Actions.runBlocking(new SequentialAction(driveFromLaunchPosOneToPark));
-
-        sleep(1000);
-    }
-
-    public boolean launchBall(RobotConveyor conveyor) {
-        // Expects the launch motor to be controlled externally
-        conveyor.launchBall();
-        if (isStopRequested()) return false;
-        sleep(2000);
-        conveyor.launchGateOpen();
-        if (isStopRequested()) return false;
-        sleep(500);
-        return true;
+                launchTwoToTapeMarkTwo,
+                robotControl.conveyorOn(),
+                toTapeMarkTwoToEnd,
+                robotControl.conveyorOff(),
+                tapeMarkTwoEndToLaunchThree,
+                robotControl.conveyorOff(),
+                robotControl.launchBalls(),
+                park,
+                robotControl.launchMotorOff()
+        ));
     }
 }

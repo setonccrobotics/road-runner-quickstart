@@ -18,7 +18,7 @@ public class RobotControl {
     public class LaunchMotorOn implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            robotConveyor.updateTargetDistance(50);
+            robotConveyor.updateTargetDistance(48);
             robotConveyor.launchMotorOn();
             return false;
         }
@@ -74,14 +74,14 @@ public class RobotControl {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
             robotConveyor.launchBall();
-            robotConveyor.turnInTakeOn();
-            //try {
-            //    Thread.sleep(1000);
-            //} catch (InterruptedException e) {
-            //    return false;
-            //}
             try {
-                Thread.sleep(1400);
+                Thread.sleep(600);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            robotConveyor.turnInTakeOn();
+            try {
+                Thread.sleep(800);
             } catch (InterruptedException e) {
                 return false;
             }

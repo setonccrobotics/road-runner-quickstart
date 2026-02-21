@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
@@ -23,13 +19,18 @@ public class BlueGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Define the field positions
+
         Pose2d startPos = new Pose2d(-62, -33, Math.toRadians(90));
-        Pose2d launchPosOne = new Pose2d(-22, -22, Math.toRadians(44));
-        Pose2d tapeMarkOnePos = new Pose2d(-12, -30, Math.toRadians(270));
-        Pose2d tapeMarkOneEndPos = new Pose2d(-12, -54, Math.toRadians(270));
-        Pose2d launchPosTwo = new Pose2d(-22, -22, Math.toRadians(44));
-        Pose2d tapeMarkTwoPos = new Pose2d(12, -30, Math.toRadians(270));
-        Pose2d tapeMarkTwoEndPos = new Pose2d(12, -54, Math.toRadians(270));
+        Pose2d launchPos = new Pose2d(-22, -22, Math.toRadians(44));
+        Pose2d parkPos = new Pose2d(-12.0, -30.0, Math.toRadians(40.0));
+        Pose2d tapeMarkOneStartPos = new Pose2d(-12, -30, Math.toRadians(270));
+        Pose2d tapeMarkOneEndPos = new Pose2d(-12, -56, Math.toRadians(270));
+        Pose2d tapeMarkTwoStartPos = new Pose2d(12, -28, Math.toRadians(260));
+        Pose2d tapeMarkTwoEndPos = new Pose2d(12.0, -64.0, Math.toRadians(260));
+        Pose2d openGateStartPos = new Pose2d(-12.0, -50.0, Math.toRadians(180));
+        Pose2d openGateEndPos = new Pose2d(-4.0, -57.0, Math.toRadians(180));
+
+
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
 
@@ -37,69 +38,47 @@ public class BlueGoal extends LinearOpMode {
         ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-20.0, 20.0);
         TranslationalVelConstraint fullVel = new TranslationalVelConstraint(100.0);
         ProfileAccelConstraint fullAccel = new ProfileAccelConstraint(-80.0, 80.0);
-/*
-        Actions.runBlocking(new SequentialAction(drive.actionBuilder(startPos)
-                //Go from start position to Launch position
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0), fullVel, fullAccel)
-                //Go to before the balls
-                .strafeToSplineHeading(new Vector2d(-12.0, -30.0), Math.toRadians(270.0), fullVel, fullAccel)
-                //Go thrugh the balls
-                .strafeToConstantHeading(new Vector2d(-12.0, -54.0), fullVel, fullAccel)
-                //Go back and open gate
-                .strafeToConstantHeading(new Vector2d(-12.0, -50.0), fullVel, fullAccel)
-                .splineToSplineHeading(new Pose2d(-4.0, -55.0, Math.toRadians(180.0)), Math.toRadians(270.0), fullVel, fullAccel)
-                //go to launch position
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0), fullVel, fullAccel)
-                //go to other line of balls
-                .strafeToSplineHeading(new Vector2d(12.0, -30.0), Math.toRadians(270.0), fullVel, fullAccel)
-                //go forward thrugh balls
-                .strafeToConstantHeading(new Vector2d(12.0, -50.0), fullVel, fullAccel)
-                //go to launch position
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0), fullVel, fullAccel)
-                .build()));
-        */
-
 
         // Define the robot actions
         Action driveFromStartToLaunchPosOne = drive.actionBuilder(startPos)
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0), fullVel, fullAccel)
+                .strafeToSplineHeading(launchPos.position, launchPos.heading, fullVel, fullAccel)
                 .build();
 
-        Action driveFromLaunchPosOneToTapeMarkOne = drive.actionBuilder(launchPosOne)
-                .strafeToSplineHeading(new Vector2d(-12.0, -30.0), Math.toRadians(270.0), fullVel, fullAccel)
+        Action driveFromLaunchPosOneToTapeMarkOne = drive.actionBuilder(launchPos)
+                .strafeToSplineHeading(tapeMarkOneStartPos.position, tapeMarkOneStartPos.heading, fullVel, fullAccel)
                 .build();
 
-        Action driveFromTapeMarkOneToEnd = drive.actionBuilder(tapeMarkOnePos)
-                .strafeToConstantHeading(new Vector2d(-12.0, -56.0), slowVel, slowAccel)
+        Action driveFromTapeMarkOneStartToEnd = drive.actionBuilder(tapeMarkOneStartPos)
+                .strafeToConstantHeading(tapeMarkOneEndPos.position, slowVel, slowAccel)
                 .build();
 
-        Action driveFromTapeMarkEndToLaunchPosOne = drive.actionBuilder(tapeMarkOneEndPos)
+        Action driveFromTapeMarkOneEndToLaunchPosOne = drive.actionBuilder(tapeMarkOneEndPos)
                 //open gate
-                .strafeToConstantHeading(new Vector2d(-12.0, -50.0), fullVel)
-                .splineToSplineHeading(new Pose2d(-4.0, -57.0, Math.toRadians(180.0)), Math.toRadians(270.0), fullVel)
+                .strafeToConstantHeading(openGateStartPos.position, fullVel)
+                .splineToSplineHeading(openGateEndPos, tapeMarkOneEndPos.heading, fullVel)
                 //go to launch position
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(44.0), fullVel, fullAccel)
+                .strafeToSplineHeading(launchPos.position, launchPos.heading, fullVel, fullAccel)
                 .build();
 
-        Action driveFromLaunchPosTwoToTapeMarkTwo = drive.actionBuilder(launchPosTwo)
+        Action driveFromLaunchPosToTapeMarkTwo = drive.actionBuilder(launchPos)
                 //Line two
-                .strafeToSplineHeading(new Vector2d(12.0, -28.0), Math.toRadians(180.0), fullVel, fullAccel)
+                .strafeToSplineHeading(tapeMarkTwoStartPos.position, tapeMarkTwoStartPos.heading, fullVel, fullAccel)
                 .build();
 
-
-        Action driveFromTapeMarkTwoToEnd = drive.actionBuilder(tapeMarkTwoPos)
-                //go forward thrugh balls
-                .strafeToConstantHeading(new Vector2d(12.0, -64.0), slowVel, slowAccel)
+        Action driveFromTapeMarkTwoToEnd = drive.actionBuilder(tapeMarkTwoStartPos)
+                //go forward through balls
+                .strafeToConstantHeading(tapeMarkTwoEndPos.position, slowVel, slowAccel)
                 .build();
 
         Action driveFromTapeMarkEndToLaunchPosThree = drive.actionBuilder(tapeMarkTwoEndPos)
                 //go to launch position
-                .strafeToSplineHeading(new Vector2d(-22.0, -22.0), Math.toRadians(40.0), fullVel, fullAccel)
+                .strafeToSplineHeading(launchPos.position, parkPos.heading, fullVel, fullAccel)
+                //.strafeToSplineHeading(launchPos.position, launchPos.heading, fullVel, fullAccel)
                 .build();
 
-        Action park = drive.actionBuilder(launchPosTwo)
+        Action driveFromLaunchPosToPark = drive.actionBuilder(launchPos)
                 //go to launch position
-                .strafeToSplineHeading(new Vector2d(-12.0, -30.0), Math.toRadians(40.0), fullVel, fullAccel)
+                .strafeToSplineHeading(parkPos.position, parkPos.heading, fullVel, fullAccel)
                 .build();
 
         RobotControl robotControl = new RobotControl(hardwareMap);
@@ -113,19 +92,18 @@ public class BlueGoal extends LinearOpMode {
                 robotControl.launchBalls(),
                 driveFromLaunchPosOneToTapeMarkOne,
                 robotControl.conveyorOn(),
-                driveFromTapeMarkOneToEnd,
+                driveFromTapeMarkOneStartToEnd,
                 robotControl.conveyorOff(),
-                driveFromTapeMarkEndToLaunchPosOne,
+                driveFromTapeMarkOneEndToLaunchPosOne,
                 robotControl.launchBalls(),
-
-                driveFromLaunchPosTwoToTapeMarkTwo,
+                driveFromLaunchPosToTapeMarkTwo,
                 robotControl.conveyorOn(),
                 driveFromTapeMarkTwoToEnd,
                 robotControl.conveyorOff(),
                 driveFromTapeMarkEndToLaunchPosThree,
                 robotControl.conveyorOff(),
                 robotControl.launchBalls(),
-                park,
+                driveFromLaunchPosToPark,
                 robotControl.launchMotorOff()
         ));
     }
