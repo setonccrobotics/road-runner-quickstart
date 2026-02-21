@@ -13,17 +13,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="BlueLong", group="SCC")
-public class BlueLong extends LinearOpMode {
+@Autonomous(name="RedLong", group="SCC")
+public class RedLong extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(62, -9, Math.toRadians(0));
-        Pose2d launchPos = new Pose2d(-6, -11, Math.toRadians(45));
-        Pose2d parkPos = new Pose2d(3, -16, Math.toRadians(45));
-        Pose2d tapeMarkStart = new Pose2d(35, -28, Math.toRadians(270));
-        Pose2d tapeMarkEnd = new Pose2d(35, -55, Math.toRadians(270));
+        Pose2d startPos = new Pose2d(62, 9, Math.toRadians(0));
+        Pose2d launchPos = new Pose2d(-6, 11, Math.toRadians(-45));
+        Pose2d parkPos = new Pose2d(3, 16, Math.toRadians(-45));
+        Pose2d tapeMarkStart = new Pose2d(35, 28, Math.toRadians(-270));
+        Pose2d tapeMarkEnd = new Pose2d(35, 55, Math.toRadians(-270));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
         RobotControl robotControl = new RobotControl(hardwareMap);
@@ -51,7 +51,7 @@ public class BlueLong extends LinearOpMode {
                 .build();
 
         Action driveFromTapeMarkEndToLaunchPos = drive.actionBuilder(tapeMarkEnd)
-                .lineToY(launchPos.position.y - 10, fullVel, fullAccel)
+                .lineToY(launchPos.position.y + 10, fullVel, fullAccel)
                 .splineToLinearHeading(launchPos, launchPos.heading, fullVel, fullAccel)
                 .build();
 

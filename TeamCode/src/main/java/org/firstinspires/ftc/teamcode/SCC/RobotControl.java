@@ -27,6 +27,18 @@ public class RobotControl {
         return new LaunchMotorOn();
     }
 
+    public class LaunchMotorOnLong implements Action {
+        @Override
+        public boolean run (@NonNull TelemetryPacket packet) {
+            robotConveyor.updateTargetDistance(60);
+            robotConveyor.launchMotorOn();
+            return false;
+        }
+    }
+    public Action launchMotorOnLong() {
+        return new LaunchMotorOnLong();
+    }
+
     public class LaunchMotorOff implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
