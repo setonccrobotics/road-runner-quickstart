@@ -19,18 +19,19 @@ public class RedLong extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(62, 9, Math.toRadians(0));
-        Pose2d launchPos = new Pose2d(-6, 11, Math.toRadians(-45));
-        Pose2d parkPos = new Pose2d(3, 16, Math.toRadians(-45));
-        Pose2d tapeMarkStart = new Pose2d(35, 28, Math.toRadians(-270));
-        Pose2d tapeMarkEnd = new Pose2d(35, 55, Math.toRadians(-270));
+        Pose2d startPos = new Pose2d(62, 13, Math.toRadians(0));
+        Pose2d launchPos = new Pose2d(-6, 11, Math.toRadians(-43));
+        Pose2d launchPos2 = new Pose2d(-10, 15, Math.toRadians(-38));
+        Pose2d parkPos = new Pose2d(35, 11, Math.toRadians(-90));
+        Pose2d tapeMarkStart = new Pose2d(34.5, 28, Math.toRadians(-270));
+        Pose2d tapeMarkEnd = new Pose2d(34.5, 55, Math.toRadians(-270));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
         RobotControl robotControl = new RobotControl(hardwareMap);
 
         // Sets constraints for velocity
-        TranslationalVelConstraint slowVel = new TranslationalVelConstraint(8.0);
-        ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-8.0, 8.0);
+        TranslationalVelConstraint slowVel = new TranslationalVelConstraint(9.0);
+        ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-9.0, 9.0);
         TranslationalVelConstraint fullVel = new TranslationalVelConstraint(100.0);
         ProfileAccelConstraint fullAccel = new ProfileAccelConstraint(-80.0, 80.0);
 
@@ -50,13 +51,14 @@ public class RedLong extends LinearOpMode {
                 .strafeToConstantHeading(tapeMarkEnd.position, slowVel, slowAccel)
                 .build();
 
-        Action driveFromTapeMarkEndToLaunchPos = drive.actionBuilder(tapeMarkEnd)
-                .lineToY(launchPos.position.y + 10, fullVel, fullAccel)
-                .splineToLinearHeading(launchPos, launchPos.heading, fullVel, fullAccel)
+        Action driveFromTapeMarkEndToLaunchPos2 = drive.actionBuilder(tapeMarkEnd)
+                .lineToY(launchPos2.position.y + 15, fullVel, fullAccel)
+                .splineToLinearHeading(launchPos2, launchPos2.heading, fullVel, fullAccel)
                 .build();
 
-        Action driveFromLaunchPosToPark = drive.actionBuilder(launchPos)
-                .splineToLinearHeading(parkPos, parkPos.heading, fullVel, fullAccel)
+        Action driveFromLaunchPos2ToPark = drive.actionBuilder(launchPos2)
+                .turnTo(parkPos.heading)
+                .strafeTo(parkPos.position)
                 .build();
 
         //Action autoLaunchBall = RobotConveyor.AutoLaunchBall;
@@ -74,9 +76,9 @@ public class RedLong extends LinearOpMode {
                 robotControl.conveyorOn(),
                 driveFromTapeMarkStartToTapeMarkEnd,
                 robotControl.conveyorOff(),
-                driveFromTapeMarkEndToLaunchPos,
+                driveFromTapeMarkEndToLaunchPos2,
                 robotControl.launchBalls(),
-                driveFromLaunchPosToPark,
+                driveFromLaunchPos2ToPark,
                 robotControl.launchMotorOff()
         ));
     }

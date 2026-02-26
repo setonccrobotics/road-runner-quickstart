@@ -19,18 +19,18 @@ public class BlueLong extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         // Define the field positions
-        Pose2d startPos = new Pose2d(62, -9, Math.toRadians(0));
-        Pose2d launchPos = new Pose2d(-6, -11, Math.toRadians(45));
-        Pose2d parkPos = new Pose2d(3, -16, Math.toRadians(45));
-        Pose2d tapeMarkStart = new Pose2d(35, -28, Math.toRadians(270));
-        Pose2d tapeMarkEnd = new Pose2d(35, -55, Math.toRadians(270));
+        Pose2d startPos = new Pose2d(62, -13, Math.toRadians(0));
+        Pose2d launchPos = new Pose2d(-6, -11, Math.toRadians(40));
+        Pose2d parkPos = new Pose2d(35, -12, Math.toRadians(90));
+        Pose2d tapeMarkStart = new Pose2d(34, -28, Math.toRadians(270));
+        Pose2d tapeMarkEnd = new Pose2d(34, -55, Math.toRadians(270));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPos);
         RobotControl robotControl = new RobotControl(hardwareMap);
 
         // Sets constraints for velocity
-        TranslationalVelConstraint slowVel = new TranslationalVelConstraint(8.0);
-        ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-8.0, 8.0);
+        TranslationalVelConstraint slowVel = new TranslationalVelConstraint(9.0);
+        ProfileAccelConstraint slowAccel = new ProfileAccelConstraint(-9.0, 9.0);
         TranslationalVelConstraint fullVel = new TranslationalVelConstraint(100.0);
         ProfileAccelConstraint fullAccel = new ProfileAccelConstraint(-80.0, 80.0);
 
@@ -51,12 +51,13 @@ public class BlueLong extends LinearOpMode {
                 .build();
 
         Action driveFromTapeMarkEndToLaunchPos = drive.actionBuilder(tapeMarkEnd)
-                .lineToY(launchPos.position.y - 10, fullVel, fullAccel)
+                .lineToY(launchPos.position.y - 12, fullVel, fullAccel)
                 .splineToLinearHeading(launchPos, launchPos.heading, fullVel, fullAccel)
                 .build();
 
         Action driveFromLaunchPosToPark = drive.actionBuilder(launchPos)
-                .splineToLinearHeading(parkPos, parkPos.heading, fullVel, fullAccel)
+                .turnTo(parkPos.heading)
+                .strafeTo(parkPos.position)
                 .build();
 
         //Action autoLaunchBall = RobotConveyor.AutoLaunchBall;

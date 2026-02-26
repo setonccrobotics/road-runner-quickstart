@@ -30,7 +30,7 @@ public class RobotControl {
     public class LaunchMotorOnLong implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
-            robotConveyor.updateTargetDistance(60);
+            robotConveyor.updateTargetDistance(62);
             robotConveyor.launchMotorOn();
             return false;
         }
