@@ -19,6 +19,8 @@ public class Peacemaker extends LinearOpMode {
         RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
         RobotLiftServo robotLift = new RobotLiftServo(hardwareMap);
         double driveFactor = 0.5;
+        LedStrip ledStrip = new LedStrip(hardwareMap);
+        Pose2d previousPosition = new Pose2d(0, 0, Math.toRadians(0.0));
 
         waitForStart();
 
@@ -43,17 +45,7 @@ public class Peacemaker extends LinearOpMode {
                 int id = robotVision.getTagId();
                 double upperOffset = 1.0;
                 double lowerOffset = -1.0;
-                /*if (distance > 100) {
-                    if (id == 20) {
-                        // Blue
-                        upperOffset = -4.0;
-                        lowerOffset = -6.0;
-                    } else {
-                        // Red
-                        upperOffset = 6.0;
-                        lowerOffset = 4.0;
-                    }
-                }*/
+
 
                 // Should we turn to the left
                 if (leftOffset > upperOffset) {
@@ -65,6 +57,7 @@ public class Peacemaker extends LinearOpMode {
                             ),
                             0.1
                     ));
+                    ledStrip.setLedColor(0.06);
                 } else if (leftOffset < lowerOffset) {
                     // No, spin to the right
                     drive.setDrivePowers(new PoseVelocity2d(
@@ -74,8 +67,9 @@ public class Peacemaker extends LinearOpMode {
                             ),
                             -0.1
                     ));
+                    ledStrip.setLedColor(0.06);
                 } else {
-                    // No, spin to the right
+                    // target acquired
                     drive.setDrivePowers(new PoseVelocity2d(
                             new Vector2d(
                                     0.0,
@@ -83,8 +77,21 @@ public class Peacemaker extends LinearOpMode {
                             ),
                             0.0
                     ));
+                    if (robotConveyor.getLaunchVelocity() - 5.0 > robotConveyor.getTargetLaunchVelocity()) {
+                        ledStrip.setLedColor(0.45); // We are up to speed!
+                    } else {
+                        ledStrip.setLedColor(0.11); // We are on target but not up to speed yet!
+                    }
                 }
             } else {
+                // Has the position of the robot changed?
+                if (drive.localizer.getPose() != previousPosition){
+                    // Yes, set the LED red
+                    ledStrip.setLedColor(0.28);
+                }
+                // Update the previous position
+                previousPosition = drive.localizer.getPose();
+
                 // Drive the robot with roadrunner via gamepad 1 input
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(

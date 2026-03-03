@@ -50,6 +50,7 @@ public class RobotConveyor {
     private Servo orvisServo; // Thumbs up servo
     private double ORVIS_SERVO_HOME = 0.45;
     private double ORVIS_SERVO_UP = 0.85;
+    private double targetLaunchVelocity = 1000;
 
     public RobotConveyor(HardwareMap hardwareMap) {
         // Configure the hardware map
@@ -148,6 +149,7 @@ public class RobotConveyor {
             double targetDistance = robotVision.getDistance();
             if (targetDistance > 0.0) {
                 launchVelocity = ((targetDistance * 9.4)) + 1425;
+                targetLaunchVelocity = launchVelocity;
             }
             launcherMotor.setVelocity(launchVelocity);
             setOrvisUp();
@@ -202,6 +204,7 @@ public class RobotConveyor {
             double targetDistance = robotVision.getDistance();
             if (targetDistance > 0.0) {
                 launchVelocity = ((targetDistance * 9.4)) + 1425;
+                targetLaunchVelocity = launchVelocity;
             }
             launcherMotor.setVelocity(launchVelocity);
             setOrvisUp();
@@ -309,6 +312,14 @@ public class RobotConveyor {
 
     public double getOuttakeSideSensorDistance() {
         return outtakeSideDistanceSensor.getDistance(DistanceUnit.INCH);
+    }
+
+    public double getLaunchVelocity() {
+        return launcherMotor.getVelocity();
+    }
+
+    public double getTargetLaunchVelocity() {
+        return targetLaunchVelocity;
     }
 
     public double getLaunchSensorDistance() {
