@@ -9,9 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class RobotLiftServo {
     private CRServo robotLiftServoLeft = null;
-    private TouchSensor robotLiftHomeSensorLeft;
+    private TouchSensor robotLiftHomeSensorLeft = null;
     private CRServo robotLiftServoRight = null;
-    private TouchSensor robotLiftHomeSensorRight;
+    private TouchSensor robotLiftHomeSensorRight = null;
+    private TouchSensor robotLiftedUpSensor = null;
 
     public RobotLiftServo(HardwareMap hardwareMap) {
         // Configure the hardware map
@@ -23,6 +24,8 @@ public class RobotLiftServo {
                 "robotLiftServoRight");
         robotLiftHomeSensorRight = hardwareMap.get(TouchSensor.class,
                 "robotLiftHomeSensorRight");
+        robotLiftedUpSensor = hardwareMap.get(TouchSensor.class,
+                "robotLiftedUpSensor");
 
         // Configure the servos
         robotLiftServoLeft.setDirection(CRServo.Direction.FORWARD);
@@ -53,7 +56,7 @@ public class RobotLiftServo {
         robotLiftServoRight.setPower(0.0);
     }
 
-    public void run(Gamepad gamepad) {
+    public void run(Gamepad gamepad, LedStrip ledStrip) {
         // Are we going up and has the upper limit not been reached?
         if (gamepad.right_bumper) {
             // Yes, go up
@@ -75,6 +78,12 @@ public class RobotLiftServo {
             // No travel requested, stop the servos
             robotLiftServoLeft.setPower(0.0);
             robotLiftServoRight.setPower(0.0);
+        }
+
+        // The upper limit has been reached
+        if (robotLiftedUpSensor.isPressed()) {
+            // Turn on the rainbow animation
+            ledStrip.setLedColor(0.2);
         }
     }
 

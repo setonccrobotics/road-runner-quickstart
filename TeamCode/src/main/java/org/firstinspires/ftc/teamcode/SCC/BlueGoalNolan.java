@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.SCC;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
@@ -24,19 +21,21 @@ public class BlueGoalNolan extends LinearOpMode {
         Pose2d startPos = new Pose2d(-55, -43, Math.toRadians(54));
         Pose2d launchPosOne = new Pose2d(-22, -22, Math.toRadians(-310));//44 316
         Pose2d firstTapeMark = new Pose2d(-12, -26, Math.toRadians(-84));//270 90
-        Pose2d firstTapeMarkEnd = new Pose2d(-11, -53, Math.toRadians(-84));//270 90
-        Pose2d launchPosTwo = new Pose2d(-22, -22, Math.toRadians(-310));//44 316
+        Pose2d firstTapeMarkEnd = new Pose2d(-11, -46, Math.toRadians(-84));//270 90
+        Pose2d launchPosTwo = new Pose2d(-21, -18, Math.toRadians(-310));//44 316
         Pose2d secondTapeMark = new Pose2d(13, -24, Math.toRadians(-90));//270 90
-        Pose2d secondTapeMarkEnd = new Pose2d(13, -51, Math.toRadians(-90));//270 90
+        Pose2d secondTapeMarkEnd = new Pose2d(13, -46, Math.toRadians(-90));//270 90
+        Pose2d secondTapeMarkBack = new Pose2d(13, -40, Math.toRadians(-90));//270 90
         Pose2d launchThree = new Pose2d(-30, -20, Math.toRadians(-310));//44 316
 
         //define strafes to get to x Pos
         Pose2d launchPos = new Pose2d(-24, -20, Math.toRadians(-310));//44 316
         Pose2d tapeMarkOneStartPos = new Pose2d(-12, -26, Math.toRadians(-84));//272 92
-        Vector2d tapeMarkOneEndPos = new Vector2d(-11, -53);
-        Pose2d launchTwo = new Pose2d(-22, -16, Math.toRadians(-310));//44 316
+        Vector2d tapeMarkOneEndPos = new Vector2d(-11, -46);
+        Pose2d launchTwo = new Pose2d(-21, -12, Math.toRadians(-310));//44 316
         Pose2d tapeMarkTwoStartPos = new Pose2d(13, -24, Math.toRadians(-80));//180 0
-        Vector2d tapeMarkTwoEndPos = new Vector2d(13, -51);
+        Vector2d tapeMarkTwoEndPos = new Vector2d(13, -46);
+        Vector2d secondTapeMarkBackEnd = new Vector2d(13, -40);
         Pose2d launchPosThree = new Pose2d(-30, -20, Math.toRadians(-310));//40 319
         Pose2d parkPos = new Pose2d(-12, -30, Math.toRadians(-314));//40 319
 
@@ -64,8 +63,8 @@ public class BlueGoalNolan extends LinearOpMode {
 
         Action tapeMarkOneEndToLaunchTwo = drive.actionBuilder(firstTapeMarkEnd)
                 //open gate
-                .strafeToConstantHeading(new Vector2d(-12.0, -46.0), fullVel)//this backs up from previous position
-                .splineToSplineHeading(new Pose2d(0.0, -52.0, Math.toRadians(180)), Math.toRadians(-90), fullVel)//this strafes to open gate
+                .strafeToConstantHeading(new Vector2d(-12.0, -44.0), fullVel)//this backs up from previous position
+                .splineToSplineHeading(new Pose2d(0.0, -50.0, Math.toRadians(180)), Math.toRadians(90), fullVel)//this strafes to open gate
                 //go to launch position
                 .strafeToSplineHeading(launchTwo.position, launchTwo.heading, fullVel, fullAccel)
                 .build();
@@ -81,7 +80,12 @@ public class BlueGoalNolan extends LinearOpMode {
                 .strafeToConstantHeading(tapeMarkTwoEndPos, slowVel, slowAccel)
                 .build();
 
-        Action tapeMarkTwoEndToLaunchThree = drive.actionBuilder(secondTapeMarkEnd)
+        Action tapeMarkTwoBack = drive.actionBuilder(secondTapeMarkEnd)
+                //go forward thrugh balls
+                .strafeToConstantHeading(secondTapeMarkBackEnd, fullVel, fullAccel)
+                .build();
+
+        Action tapeMarkTwoEndToLaunchThree = drive.actionBuilder(secondTapeMarkBack)
                 //go to launch position
                 .strafeToSplineHeading(launchPosThree.position, launchPosThree.heading, fullVel, fullAccel)
                 .build();
@@ -110,6 +114,7 @@ public class BlueGoalNolan extends LinearOpMode {
                 launchTwoToTapeMarkTwo,
                 robotControl.conveyorOn(),
                 toTapeMarkTwoToEnd,
+                tapeMarkTwoBack,
                 robotControl.conveyorOff(),
                 tapeMarkTwoEndToLaunchThree,
                 robotControl.conveyorOff(),

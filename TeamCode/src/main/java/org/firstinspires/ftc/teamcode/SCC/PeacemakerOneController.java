@@ -18,6 +18,7 @@ public class PeacemakerOneController extends LinearOpMode {
         //McWinnerLaunchDebug mcWinnerConveyor = new McWinnerLaunchDebug(hardwareMap);
         RobotConveyor robotConveyor = new RobotConveyor(hardwareMap);
         RobotLiftServo robotLift = new RobotLiftServo(hardwareMap);
+        LedStrip ledStrip = new LedStrip(hardwareMap);
 
         waitForStart();
 
@@ -79,7 +80,7 @@ public class PeacemakerOneController extends LinearOpMode {
 
             // Service the robot hardware
             robotConveyor.runToo(gamepad1, robotVision);
-            robotLift.run(gamepad1);
+            robotLift.run(gamepad1, ledStrip);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);

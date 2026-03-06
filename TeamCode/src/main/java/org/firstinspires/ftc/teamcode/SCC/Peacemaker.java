@@ -22,12 +22,16 @@ public class Peacemaker extends LinearOpMode {
         LedStrip ledStrip = new LedStrip(hardwareMap);
         Pose2d previousPosition = new Pose2d(0, 0, Math.toRadians(0.0));
 
+        // Turn on the rainbow animation
+        ledStrip.setLedColor(0.2);
+
         waitForStart();
 
         // Zero the robot
         robotConveyor.zero();
         robotLift.zero();
         robotVision.zero(hardwareMap);
+        ledStrip.setLedColor(0.28);
 
         while (opModeIsActive()) {
             if (gamepad1.right_trigger > 0.2) {
@@ -77,7 +81,7 @@ public class Peacemaker extends LinearOpMode {
                             ),
                             0.0
                     ));
-                    if (robotConveyor.getLaunchVelocity() - 5.0 > robotConveyor.getTargetLaunchVelocity()) {
+                    if (robotConveyor.getLaunchVelocity() + 22.0 > robotConveyor.getTargetLaunchVelocity()) {
                         ledStrip.setLedColor(0.45); // We are up to speed!
                     } else {
                         ledStrip.setLedColor(0.11); // We are on target but not up to speed yet!
@@ -85,12 +89,16 @@ public class Peacemaker extends LinearOpMode {
                 }
             } else {
                 // Has the position of the robot changed?
-                if (drive.localizer.getPose() != previousPosition){
+                if (gamepad1.left_stick_y != 0.0 || gamepad1.left_stick_x != 0.0 || gamepad1.right_stick_x != 0.0){
                     // Yes, set the LED red
                     ledStrip.setLedColor(0.28);
                 }
-                // Update the previous position
-                previousPosition = drive.localizer.getPose();
+                /*telemetry.addData("gamepad1.left_stick_y", "%.2f", gamepad1.left_stick_y);
+                telemetry.addData("gamepad1.left_stick_x", "%.2f", gamepad1.left_stick_x);
+                telemetry.addData("gamepad1.right_stick_x", "%.2f", gamepad1.right_stick_x);
+                telemetry.addData("robotConveyor.getLaunchVelocity()", "%.2f", robotConveyor.getLaunchVelocity());
+                telemetry.addData("robotConveyor.getTargetLaunchVelocity()", "%.2f", robotConveyor.getTargetLaunchVelocity());
+                telemetry.update();*/
 
                 // Drive the robot with roadrunner via gamepad 1 input
                 drive.setDrivePowers(new PoseVelocity2d(
@@ -106,7 +114,7 @@ public class Peacemaker extends LinearOpMode {
 
             // Service the robot hardware
             robotConveyor.run(gamepad2, robotVision);
-            robotLift.run(gamepad1);
+            robotLift.run(gamepad1, ledStrip);
 
             // Update the screen output with interesting data
             //telemetry.addData("heading", drive.pose.heading);
