@@ -39,6 +39,18 @@ public class RobotControl {
         return new LaunchMotorOnLong();
     }
 
+    public class LaunchMotorOnFar implements Action {
+        @Override
+        public boolean run (@NonNull TelemetryPacket packet) {
+            robotConveyor.updateTargetDistance(100);
+            robotConveyor.launchMotorOn();
+            return false;
+        }
+    }
+    public Action launchMotorOnFar() {
+        return new LaunchMotorOnFar();
+    }
+
     public class LaunchMotorOff implements Action {
         @Override
         public boolean run (@NonNull TelemetryPacket packet) {
@@ -87,13 +99,13 @@ public class RobotControl {
         public boolean run (@NonNull TelemetryPacket packet) {
             robotConveyor.launchBall();
             try {
-                Thread.sleep(600);
+                Thread.sleep(1400);
             } catch (InterruptedException e) {
                 return false;
             }
             robotConveyor.turnInTakeOn();
             try {
-                Thread.sleep(800);
+                Thread.sleep(400);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -196,5 +208,23 @@ public class RobotControl {
     }
     public Action launchGateOpen() {
         return new LaunchGateOpen();
+    }
+
+    public class BallBackup implements Action {
+        @Override
+        public boolean run (@NonNull TelemetryPacket packet) {
+            robotConveyor.ballBackup();
+            try {
+                Thread.sleep(65);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            robotConveyor.turnInTakeOff();
+            robotConveyor.turnOutTakeOff();
+            return false;
+        }
+    }
+    public Action ballBackup() {
+        return new BallBackup();
     }
 }

@@ -14,7 +14,7 @@ public class SingleServoTest extends LinearOpMode
 
     // Define class members
     Servo   servo;
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    double  position = 0;//(MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
 
     @Override
@@ -31,6 +31,11 @@ public class SingleServoTest extends LinearOpMode
 
         // Scan servo till stop pressed.
         while(opModeIsActive()) {
+            if (gamepad1.dpad_up) {
+                rampUp=true;
+            } else {
+                rampUp = false;
+            }
 
             // slew the servo, according to the rampUp (direction) variable.
             if (rampUp) {
@@ -41,7 +46,7 @@ public class SingleServoTest extends LinearOpMode
                     rampUp = !rampUp;   // Switch ramp direction
                 }
             }
-            else {
+            if(gamepad1.dpad_down) {
                 // Keep stepping down until we hit the min value.
                 position -= INCREMENT ;
                 if (position <= MIN_POS ) {
