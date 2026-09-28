@@ -14,38 +14,40 @@ public class ElDuderino extends LinearOpMode {
 
     // Constants
     static final double ARM_HOME_POS = 0.0;
-    static final double ARM_HOOK_PICKUP_POS = 0.36;
-    static final double ARM_HOOK_DROP_POS = 0.35;
-    static final double ARM_ARCH_PICKUP_POS = 0.29;
-    static final double ARM_ARCH_DROP_POS = 0.30;
-    static final double ARM_CRADLE_POS = 0.265;
+    static final double ARM_HOOK_FINAL_POS = 3.2;
+    static final double ARM_HOOK_PICKUP_POS = 0.372;
+    static final double ARM_HOOK_DROP_POS = 0.358;
+    static final double ARM_ARCH_PICKUP_POS = 0.3;
+    static final double ARM_ARCH_DROP_POS = 0.302;
+    static final double ARM_ARCH_FINAL_PUSH_POS = 0.301;
+    static final double ARM_CRADLE_POS = 0.267;
     static final double ARM_CRADLE_PICKUP_POS = 0.26;
+    static final double ARM_CRADLE_EXTENSION_POS = 0.26;
     static final double ARM_PEDESTAL_POS = 0.155;
-    static final double ARM_PEDESTAL_PICKUP_POS = 0.145;
+    static final double ARM_PEDESTAL_PICKUP_POS = 0.148;
     static final double PITCH_HOME_POS = 0.0;
     static final double PITCH_PEDISTAL_PICKUP_POS = 0.46;
     static final double PITCH_PEDISTAL_MOVE_POS = 0.41;
     static final double PITCH_PEDISTAL_DROP_POS = 0.42;
+    static final double PITCH_PEDISTAL_LEAVE_POS = 0.45;
     static final double PITCH_CRADLE_PICKUP_POS = 0.5;
     static final double PITCH_CRADLE_LIFT_POS = 0.4;
-    static final double PITCH_CRADLE_DROP_POS = 0.45;
+    static final double PITCH_CRADLE_DROP_POS = 0.46;
     static final double PITCH_ARCH_PICKUP_AND_DROP_POS = 0.49;
-    static final double PITCH_ARCH_LIFT_POS = 0.45;
+    static final double PITCH_ARCH_LIFT_POS = 0.46;
+    static final double PITCH_ARCH_PUSH_POS = 0.53;
     static final double PITCH_HOOK_PICKUP_POS = 0.5;
-    static final double PITCH_HOOK_LIFT__POS = 0.47;
+    static final double PITCH_HOOK_LIFT_POS = 0.492;
     static final double PITCH_HOOK_DROP_POS = 0.48;
-    static final double WRIST_ROTATION_HOME_POS = 0.5;
-    static final double LEFT_CLAW_HOME = 0.5;
-    static final double RIGHT_CLAW_HOME = 0.5;
-    static final double LEFT_CLAW_OPEN = 0.3;
-    static final double RIGHT_CLAW_OPEN = 0.7;
-    static final double LEFT_CLAW_HOOK_CLOSE = 0.58;
-    static final double RIGHT_CLAW_HOOK_CLOSE = 0.42;
+    static final double WRIST_ROTATION_HOME_POS = 0.0;
+    static final double WRIST_ROTATION_SIDE_POS = 0.3;
+    static final double CLAW_HOME = 0.2;
+    static final double CLAW_OPEN = 0.47;
+    static final double CLAW_CLOSE = 0.24;
     private Servo positionServo;
     private Servo pitchServo;
     private Servo rotationServo;
-    private Servo leftClawServo;
-    private Servo rightClawServo;
+    private Servo clawServo;
     private DcMotor slideMotor = null;
     private TouchSensor slideHomeSensor;
 
@@ -53,9 +55,8 @@ public class ElDuderino extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         positionServo = hardwareMap.get(Servo.class, "positionServo");
         pitchServo = hardwareMap.get(Servo.class, "pitchServo");
-  /*      rotationServo = hardwareMap.get(Servo.class, "rotationServo");
-        leftClawServo = hardwareMap.get(Servo.class, "leftClawServo");
-        rightClawServo = hardwareMap.get(Servo.class, "rightClawServo");
+        rotationServo = hardwareMap.get(Servo.class, "rotationServo");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
         slideMotor = hardwareMap.get(DcMotor.class,"slideMotor");
         slideHomeSensor = hardwareMap.get(TouchSensor.class, "slideHomeSensor");
 
@@ -64,96 +65,405 @@ public class ElDuderino extends LinearOpMode {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-*/
-        // Wait for the DS start button to be touched.
-        telemetry.addData(">", "Touch Play to run OpMode");
-        telemetry.update();
-
-        //Swing test
 
         pitchServo.setPosition(PITCH_HOME_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(500);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_HOME_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        // Zero the slide
+        zero();
+
+        clawServo.setPosition(CLAW_HOME);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_HOME_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
         if (isStopRequested()) return;
 
+        // Wait for the DS start button to be touched.
+        telemetry.addData(">", "Touch Play to run OpMode");
+        telemetry.update();
+
+
+        // Wait for the user to press the play button
+        waitForStart();
+
+        //Pedestal
         positionServo.setPosition(ARM_PEDESTAL_PICKUP_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         pitchServo.setPosition(PITCH_PEDISTAL_PICKUP_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(250);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_CLOSE);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         pitchServo.setPosition(PITCH_PEDISTAL_MOVE_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_PEDESTAL_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
         if (isStopRequested()) return;
+
+        slideToEncoderPos(900);
 
         pitchServo.setPosition(PITCH_PEDISTAL_DROP_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
         if (isStopRequested()) return;
 
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_PEDISTAL_LEAVE_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+       /* positionServo.setPosition(ARM_PEDESTAL_PICKUP_POS);
+
+        if (isStopRequested()) return;
+        sleep(2000);
+        if (isStopRequested()) return;
+       */
+        slideToEncoderPos(200);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        //Cradle
         positionServo.setPosition(ARM_CRADLE_PICKUP_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_CRADLE_PICKUP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_SIDE_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(1520);
+
+        if (isStopRequested()) return;
+        sleep(1500);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_CLOSE);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_CRADLE_LIFT_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_HOME_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_CRADLE_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(1900);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_CRADLE_DROP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_CRADLE_LIFT_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        //Arch
+        slideToEncoderPos(400);
+
+        if (isStopRequested()) return;
+        sleep(1500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_ARCH_PICKUP_POS);
 
         if (isStopRequested()) return;
-        sleep(2000);
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_HOME_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_ARCH_PICKUP_AND_DROP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(750);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_CLOSE);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_ARCH_DROP_POS);
 
         if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_ARCH_LIFT_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(950);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_ARCH_PICKUP_AND_DROP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(800);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_CLOSE);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_ARCH_PUSH_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(1300,0.2);
+
+        if (isStopRequested()) return;
         sleep(2000);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(50);
+
+        if (isStopRequested()) return;
+        sleep(2000);
+        if (isStopRequested()) return;
+
+        //Hook
+        pitchServo.setPosition(PITCH_HOOK_PICKUP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_SIDE_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_HOOK_PICKUP_POS);
 
         if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(500,0.2);
+
+        if (isStopRequested()) return;
         sleep(2000);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_CLOSE);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_HOOK_LIFT_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_HOOK_DROP_POS);
 
         if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(1500,0.2);
+
+        if (isStopRequested()) return;
         sleep(2000);
+        if (isStopRequested()) return;
+
+        pitchServo.setPosition(PITCH_CRADLE_PICKUP_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        clawServo.setPosition(CLAW_OPEN);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        positionServo.setPosition(ARM_HOOK_DROP_POS);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        slideToEncoderPos(200);
+
+        if (isStopRequested()) return;
+        sleep(1000);
+        if (isStopRequested()) return;
+
+        //Return
+        pitchServo.setPosition(PITCH_HOME_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        rotationServo.setPosition(WRIST_ROTATION_HOME_POS);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        // Zero the slide
+        zero();
+
+        clawServo.setPosition(CLAW_HOME);
+
+        if (isStopRequested()) return;
+        sleep(500);
+        if (isStopRequested()) return;
+
+        positionServo.setPosition(ARM_CRADLE_POS);
+
+        if (isStopRequested()) return;
+        sleep(1000);
         if (isStopRequested()) return;
 
         positionServo.setPosition(ARM_HOME_POS);
 
         if (isStopRequested()) return;
-        sleep(3000);
+        sleep(2000);
         if (isStopRequested()) return;
+
+
+
+
+
+
 /*
         // Zero the slide
         zero();
@@ -230,14 +540,14 @@ public class ElDuderino extends LinearOpMode {
 
  */
     }
-/*
+
     public void zero() {
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Zero the linear slide
         while (!slideHomeSensor.isPressed()) {
-            slideMotor.setPower(-0.9);
+            slideMotor.setPower(-0.2);
         }
 
         // Back off the home switch
@@ -255,7 +565,13 @@ public class ElDuderino extends LinearOpMode {
     public void slideToEncoderPos(int encoderPos) {
         slideMotor.setTargetPosition(encoderPos);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setPower(1.0);
+        slideMotor.setPower(0.7);//0.2);
+    }
+
+    public void slideToEncoderPos(int encoderPos, double power) {
+        slideMotor.setTargetPosition(encoderPos);
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideMotor.setPower(power);
     }
 
     public void slideToEncoderPosBlocking(int encoderPos) {
@@ -270,5 +586,5 @@ public class ElDuderino extends LinearOpMode {
         while (!(slideMotor.getCurrentPosition() >= lowerBound && slideMotor.getCurrentPosition() <= upperBound)) {
             // no op
         }
-    }*/
+    }
 }
